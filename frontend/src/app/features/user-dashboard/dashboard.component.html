@@ -6,13 +6,13 @@
     </app-sidebar>
 
     <!-- ── Main Content Area ──────────────────────────────── -->
-    <main class="flex-1 min-h-0 overflow-y-auto p-8 flex flex-col gap-6">
+    <main class="flex-1 min-h-0 overflow-y-auto px-10 py-8 flex flex-col gap-6">
 
         <!-- ════ APPLY TAB ════ -->
         @if (activeTab === 'apply') {
         <div>
-            <h1 class="text-2xl font-extrabold text-gray-900 tracking-tight mb-1">Apply for Insurance</h1>
-            <p class="text-sm text-gray-500">Fill in your details and select a policy to get started</p>
+            <h1 class="text-2xl font-extrabold text-gray-900 tracking-tight mb-0.5">Apply for Insurance</h1>
+            <p class="text-sm text-gray-400">Fill in your details and select a policy to get started</p>
         </div>
         <app-policy-apply [policies]="policies()" [policiesLoading]="policiesLoading"
             [preselectedPolicyCode]="preselectedPolicyCode" (applicationSubmitted)="loadMyApplications()">
@@ -23,8 +23,8 @@
         @if (activeTab === 'my-applications') {
         <div class="flex items-start justify-between gap-4">
             <div>
-                <h1 class="text-2xl font-extrabold text-gray-900 tracking-tight mb-1">My Applications</h1>
-                <p class="text-sm text-gray-500">Track all your insurance policy applications</p>
+                <h1 class="text-2xl font-extrabold text-gray-900 tracking-tight mb-0.5">My Applications</h1>
+                <p class="text-sm text-gray-400">Track all your insurance policy applications</p>
             </div>
             <button
                 class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-gray-500 bg-white border border-gray-200 hover:bg-gray-50 transition-all duration-200"
@@ -44,8 +44,8 @@
         @if (activeTab === 'my-policies') {
         <div class="flex items-start justify-between gap-4">
             <div>
-                <h1 class="text-2xl font-extrabold text-gray-900 tracking-tight mb-1">My Policies</h1>
-                <p class="text-sm text-gray-500">View and manage your active insurance policies</p>
+                <h1 class="text-2xl font-extrabold text-gray-900 tracking-tight mb-0.5">My Policies</h1>
+                <p class="text-sm text-gray-400">View and manage your active insurance policies</p>
             </div>
             <button
                 class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-gray-500 bg-white border border-gray-200 hover:bg-gray-50 transition-all duration-200"
@@ -64,8 +64,8 @@
         <!-- ════ BROWSE POLICIES TAB ════ -->
         @if (activeTab === 'policies') {
         <div>
-            <h1 class="text-2xl font-extrabold text-gray-900 tracking-tight mb-1">Browse Policies</h1>
-            <p class="text-sm text-gray-500">Explore all available health insurance plans</p>
+            <h1 class="text-2xl font-extrabold text-gray-900 tracking-tight mb-0.5">Browse Policies</h1>
+            <p class="text-sm text-gray-400">Explore all available health insurance plans</p>
         </div>
         <app-policy-catalog [policies]="policies()" [policiesLoading]="policiesLoading"
             (applyForPolicy)="onInitiateApply($event)">
@@ -76,8 +76,8 @@
         @if (activeTab === 'my-claims') {
         <div class="flex items-start justify-between gap-4">
             <div>
-                <h1 class="text-2xl font-extrabold text-gray-900 tracking-tight mb-1">My Claims</h1>
-                <p class="text-sm text-gray-500">Submit a new claim or view your claim history</p>
+                <h1 class="text-2xl font-extrabold text-gray-900 tracking-tight mb-0.5">My Claims</h1>
+                <p class="text-sm text-gray-400">Submit a new claim or view your claim history</p>
             </div>
         </div>
         <app-my-claims [activePolicies]="activeIssuedPolicies()">

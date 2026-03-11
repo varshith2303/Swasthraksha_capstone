@@ -1,106 +1,141 @@
 <!-- User Dashboard Sidebar -->
-<div class="h-full bg-white flex flex-col w-72 shadow-[4px_0_24px_rgba(0,0,0,0.02)] z-10 sticky top-0">
+<aside class="h-full w-60 flex-shrink-0 flex flex-col p-5 gap-1 relative overflow-hidden"
+    style="background: linear-gradient(160deg, #dbeafe 0%, #bfdbfe 45%, #93c5fd 100%); border-right: 1px solid rgba(255,255,255,0.5);">
 
-    <!-- Logo Area -->
-    <div class="p-6 border-b border-gray-100">
-        <div class="flex flex-col gap-1.5">
-            <div class="flex items-center gap-3">
-                <div class="w-9 h-9 rounded-[10px] flex items-center justify-center text-white font-bold text-sm shadow-md"
-                    style="background: linear-gradient(135deg, #1d4ed8, #2563eb);">
-                    <i class="fa-solid fa-shield-heart"></i>
-                </div>
-                <span class="text-xl font-black tracking-tight"
-                    style="background: linear-gradient(135deg, #1e3a8a, #2563eb); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
-                    VitaGuard
-                </span>
-            </div>
-            <span class="text-[0.65rem] font-bold text-gray-400 uppercase tracking-widest ml-12">User Portal</span>
+    <!-- Soft blobs -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute -top-16 -left-16 w-48 h-48 rounded-full"
+            style="background: radial-gradient(circle, rgba(219,234,254,0.6) 0%, transparent 70%);"></div>
+        <div class="absolute bottom-0 right-0 w-40 h-40 rounded-full"
+            style="background: radial-gradient(circle, rgba(191,219,254,0.5) 0%, transparent 70%);"></div>
+    </div>
+
+    <!-- Brand -->
+    <div class="relative z-10 flex items-center gap-3 pb-4 mb-2 border-b"
+        style="border-color: rgba(255,255,255,0.5);">
+        <div class="w-9 h-9 rounded-xl flex items-center justify-center shadow-lg flex-shrink-0"
+            style="background: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.9);">
+            <i class="fa-solid fa-shield-heart text-lg" style="color: #1d4ed8;"></i>
+        </div>
+        <div>
+            <span class="block text-sm font-bold tracking-tight" style="color: #0f172a;">SwasthRaksha</span>
+            <span class="block text-[0.65rem] font-bold uppercase tracking-widest"
+                style="color: #1d4ed8;">User Portal</span>
         </div>
     </div>
 
-    <!-- Navigation Links -->
-    <nav class="flex-1 py-6 px-4 flex flex-col gap-2 overflow-y-auto custom-scrollbar">
-        <p class="px-3 text-[0.65rem] font-bold text-gray-400 uppercase tracking-widest mb-2">Main Menu</p>
+    <!-- Nav -->
+    <nav class="relative z-10 flex flex-col gap-0.5 flex-1 overflow-y-auto">
 
-        <a (click)="selectTab('policies')"
-            class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer"
-            [style]="selectedTab === 'policies' ? 'background:#eff6ff; color:#1d4ed8; font-weight:700;' : 'color:#4b5563;'">
-            <i class="fa-solid fa-layer-group w-5" [style.color]="selectedTab === 'policies' ? '#1d4ed8' : '#9ca3af'"></i>
+        <button class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 text-left w-full"
+            [style]="selectedTab === 'policies'
+                ? 'background: rgba(255,255,255,0.75); color: #1d4ed8; font-weight: 700; box-shadow: 0 2px 8px rgba(37,99,235,0.15);'
+                : 'color: #1e3a5f;'"
+            (click)="selectTab('policies')">
+            <i class="fa-solid fa-layer-group text-xs flex-shrink-0"
+                [style.color]="selectedTab === 'policies' ? '#1d4ed8' : '#2563eb'"></i>
             Browse Policies
-        </a>
+            @if (selectedTab === 'policies') {
+            <span class="ml-auto w-1.5 h-1.5 rounded-full" style="background: #1d4ed8;"></span>
+            }
+        </button>
 
-        <a (click)="selectTab('apply')"
-            class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer"
-            [style]="selectedTab === 'apply' ? 'background:#eff6ff; color:#1d4ed8; font-weight:700;' : 'color:#4b5563;'">
-            <i class="fa-solid fa-file-signature w-5" [style.color]="selectedTab === 'apply' ? '#1d4ed8' : '#9ca3af'"></i>
+        <button class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 text-left w-full"
+            [style]="selectedTab === 'apply'
+                ? 'background: rgba(255,255,255,0.75); color: #1d4ed8; font-weight: 700; box-shadow: 0 2px 8px rgba(37,99,235,0.15);'
+                : 'color: #1e3a5f;'"
+            (click)="selectTab('apply')">
+            <i class="fa-solid fa-file-signature text-xs flex-shrink-0"
+                [style.color]="selectedTab === 'apply' ? '#1d4ed8' : '#2563eb'"></i>
             Find & Apply
-        </a>
+            @if (selectedTab === 'apply') {
+            <span class="ml-auto w-1.5 h-1.5 rounded-full" style="background: #1d4ed8;"></span>
+            }
+        </button>
 
-        <a (click)="selectTab('my-applications')"
-            class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer"
-            [style]="selectedTab === 'my-applications' ? 'background:#eff6ff; color:#1d4ed8; font-weight:700;' : 'color:#4b5563;'">
-            <i class="fa-solid fa-folder-open w-5" [style.color]="selectedTab === 'my-applications' ? '#1d4ed8' : '#9ca3af'"></i>
+        <button class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 text-left w-full"
+            [style]="selectedTab === 'my-applications'
+                ? 'background: rgba(255,255,255,0.75); color: #1d4ed8; font-weight: 700; box-shadow: 0 2px 8px rgba(37,99,235,0.15);'
+                : 'color: #1e3a5f;'"
+            (click)="selectTab('my-applications')">
+            <i class="fa-solid fa-folder-open text-xs flex-shrink-0"
+                [style.color]="selectedTab === 'my-applications' ? '#1d4ed8' : '#2563eb'"></i>
             My Applications
-        </a>
+            @if (selectedTab === 'my-applications') {
+            <span class="ml-auto w-1.5 h-1.5 rounded-full" style="background: #1d4ed8;"></span>
+            }
+        </button>
 
-        <a (click)="selectTab('my-policies')"
-            class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer relative"
-            [style]="selectedTab === 'my-policies' ? 'background:#eff6ff; color:#1d4ed8; font-weight:700;' : 'color:#4b5563;'">
-            <i class="fa-solid fa-shield-halved w-5" [style.color]="selectedTab === 'my-policies' ? '#1d4ed8' : '#9ca3af'"></i>
+        <button class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 text-left w-full"
+            [style]="selectedTab === 'my-policies'
+                ? 'background: rgba(255,255,255,0.75); color: #1d4ed8; font-weight: 700; box-shadow: 0 2px 8px rgba(37,99,235,0.15);'
+                : 'color: #1e3a5f;'"
+            (click)="selectTab('my-policies')">
+            <i class="fa-solid fa-shield-halved text-xs flex-shrink-0"
+                [style.color]="selectedTab === 'my-policies' ? '#1d4ed8' : '#2563eb'"></i>
             My Policies
             @if (pendingActionsCount > 0) {
-            <span
-                class="absolute right-3 top-1/2 -translate-y-1/2 min-w-[20px] h-5 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center px-1.5 shadow-sm">
+            <span class="ml-auto min-w-[18px] h-[18px] rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center px-1">
                 {{ pendingActionsCount }}
             </span>
+            } @else if (selectedTab === 'my-policies') {
+            <span class="ml-auto w-1.5 h-1.5 rounded-full" style="background: #1d4ed8;"></span>
             }
-        </a>
+        </button>
 
-        <div class="w-full h-px bg-gray-100 my-2"></div>
-        <p class="px-3 text-[0.65rem] font-bold text-gray-400 uppercase tracking-widest mb-2 mt-2">Claims Services</p>
+        <div class="w-full h-px my-2" style="background: rgba(255,255,255,0.4);"></div>
 
-        <a (click)="selectTab('my-claims')"
-            class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer"
-            [style]="selectedTab === 'my-claims' ? 'background:#eff6ff; color:#1d4ed8; font-weight:700;' : 'color:#4b5563;'">
-            <i class="fa-solid fa-file-medical w-5" [style.color]="selectedTab === 'my-claims' ? '#1d4ed8' : '#9ca3af'"></i>
-            Submit & Track Claims
-        </a>
+        <button class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 text-left w-full"
+            [style]="selectedTab === 'my-claims'
+                ? 'background: rgba(255,255,255,0.75); color: #1d4ed8; font-weight: 700; box-shadow: 0 2px 8px rgba(37,99,235,0.15);'
+                : 'color: #1e3a5f;'"
+            (click)="selectTab('my-claims')">
+            <i class="fa-solid fa-file-medical text-xs flex-shrink-0"
+                [style.color]="selectedTab === 'my-claims' ? '#1d4ed8' : '#2563eb'"></i>
+            Claims
+            @if (selectedTab === 'my-claims') {
+            <span class="ml-auto w-1.5 h-1.5 rounded-full" style="background: #1d4ed8;"></span>
+            }
+        </button>
 
-        <!-- Quick Status Mini-Widget (If applications exist) -->
+        <!-- Recent Activity Mini-Widget -->
         @if (latestApplications && latestApplications.length > 0) {
-        <div class="mt-6 mx-2 p-4 rounded-2xl" style="background: #f8fafc; border: 1px solid #e2e8f0;">
-            <p class="text-xs font-bold text-gray-800 mb-3 flex items-center justify-between">
+        <div class="mt-4 p-3 rounded-xl"
+            style="background: rgba(255,255,255,0.35); border: 1px solid rgba(255,255,255,0.5);">
+            <p class="text-[0.65rem] font-bold mb-2.5 flex items-center justify-between" style="color: #1e3a5f;">
                 Recent Activity
-                <span class="text-[0.65rem] font-bold text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded ml-2">{{
-                    latestApplications.length }}</span>
+                <span class="text-[0.6rem] font-bold px-1.5 py-0.5 rounded"
+                    style="background: rgba(255,255,255,0.6); color: #1d4ed8;">{{ latestApplications.length }}</span>
             </p>
-            <div class="flex flex-col gap-2.5">
+            <div class="flex flex-col gap-2">
                 @for (app of latestApplications | slice:0:3; track app.id) {
-                <div class="flex items-center gap-2.5">
-                    <div class="w-2 h-2 rounded-full" [ngClass]="getApplicationStatusClass(app.status)"></div>
-                    <div class="flex flex-col">
-                        <span class="text-[0.7rem] font-bold text-gray-700 truncate w-36">{{ app.policy.policyName
-                            }}</span>
-                        <span class="text-[0.6rem] text-gray-500 uppercase">{{ app.status.replace('_', ' ') }}</span>
+                <div class="flex items-center gap-2">
+                    <div class="w-1.5 h-1.5 rounded-full flex-shrink-0"
+                        [ngClass]="getApplicationStatusClass(app.status)"></div>
+                    <div class="flex flex-col min-w-0">
+                        <span class="text-[0.68rem] font-bold truncate"
+                            style="color: #1e3a5f;">{{ app.policy.policyName }}</span>
+                        <span class="text-[0.6rem]"
+                            style="color: #1d4ed8;">{{ app.status.replace('_', ' ') }}</span>
                     </div>
                 </div>
                 }
             </div>
         </div>
         }
-
     </nav>
 
-    <!-- Bottom Actions -->
-    <div class="p-4 border-t border-gray-100" style="background: #fafafa;">
+    <!-- User & Logout -->
+    <div class="relative z-10 mt-1 flex flex-col gap-1">
+        @if (userEmail) {
+        <p class="text-[0.6rem] font-medium px-1 truncate" style="color: #1e3a5f; opacity: 0.65;">{{ userEmail }}</p>
+        }
         <button (click)="logout.emit()"
-            class="flex items-center gap-3 w-full px-4 py-3 text-sm font-semibold text-gray-600 rounded-xl hover:bg-red-50 hover:text-red-600 transition-colors group">
-            <div
-                class="w-8 h-8 rounded-lg bg-white shadow-sm border border-gray-200 flex items-center justify-center group-hover:border-red-200 overflow-hidden transition-colors">
-                <i
-                    class="fa-solid fa-arrow-right-from-bracket opacity-70 group-hover:opacity-100 transition-opacity"></i>
-            </div>
-            Logout Account
+            class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 w-full"
+            style="color: #dc2626; background: rgba(255,255,255,0.35);">
+            <i class="fa-solid fa-right-from-bracket text-xs"></i>
+            Logout
         </button>
     </div>
-</div>
+
+</aside>
