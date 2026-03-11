@@ -21,7 +21,7 @@
                 <span class="text-2xl font-bold">
                     <span
                         style="background: linear-gradient(135deg,#1d4ed8,#2563eb); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;">Swastha</span><span
-                        class="text-gray-900">Raksha</span>
+                        class="text-gray-900">Raksh</span>
                 </span>
             </a>
             <h1 class="text-3xl font-black text-gray-900 mt-6">Create Your Account</h1>
@@ -32,14 +32,18 @@
         <div class="bg-white rounded-2xl shadow-xl p-8" style="border: 1px solid #dbeafe;">
 
             <!-- Alerts -->
-            <div *ngIf="successMessage" class="flex items-center gap-3 p-4 mb-6 rounded-xl text-sm animate-fade-in"
+            @if (successMessage()) {
+            <div class="flex items-center gap-3 p-4 mb-6 rounded-xl text-sm animate-fade-in"
                 style="background: #ecfdf5; border: 1px solid #a7f3d0; color: #059669;">
-                <i class="fa-solid fa-party-horn flex-shrink-0"></i>{{ successMessage }}
+                <i class="fa-solid fa-party-horn flex-shrink-0"></i>{{ successMessage() }}
             </div>
-            <div *ngIf="errorMessage" class="flex items-center gap-3 p-4 mb-6 rounded-xl text-sm animate-fade-in"
+            }
+            @if (errorMessage()) {
+            <div class="flex items-center gap-3 p-4 mb-6 rounded-xl text-sm animate-fade-in"
                 style="background: #fef2f2; border: 1px solid #fecaca; color: #dc2626;">
-                <i class="fa-solid fa-circle-exclamation flex-shrink-0"></i>{{ errorMessage }}
+                <i class="fa-solid fa-circle-exclamation flex-shrink-0"></i>{{ errorMessage() }}
             </div>
+            }
 
             <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-5" novalidate>
 
@@ -55,12 +59,13 @@
                             style="background: #f9fafb; border: 1.5px solid #e5e7eb;"
                             [style.border-color]="username.invalid && username.touched ? '#ef4444' : (username.valid && username.touched ? '#2563eb' : '#e5e7eb')" />
                     </div>
-                    <div *ngIf="username.invalid && username.touched"
-                        class="mt-1.5 text-red-500 text-xs flex items-center gap-1">
+                    @if (username.invalid && username.touched) {
+                    <div class="mt-1.5 text-red-500 text-xs flex items-center gap-1">
                         <i class="fa-solid fa-triangle-exclamation text-xs"></i>
-                        <span *ngIf="username.errors?.['required']">Full name is required.</span>
-                        <span *ngIf="username.errors?.['minlength']">Name must be at least 3 characters.</span>
+                        @if (username.errors?.['required']) {<span>Full name is required.</span>}
+                        @if (username.errors?.['minlength']) {<span>Name must be at least 3 characters.</span>}
                     </div>
+                    }
                 </div>
 
                 <!-- Email -->
@@ -76,12 +81,13 @@
                             style="background: #f9fafb; border: 1.5px solid #e5e7eb;"
                             [style.border-color]="email.invalid && email.touched ? '#ef4444' : (email.valid && email.touched ? '#2563eb' : '#e5e7eb')" />
                     </div>
-                    <div *ngIf="email.invalid && email.touched"
-                        class="mt-1.5 text-red-500 text-xs flex items-center gap-1">
+                    @if (email.invalid && email.touched) {
+                    <div class="mt-1.5 text-red-500 text-xs flex items-center gap-1">
                         <i class="fa-solid fa-triangle-exclamation text-xs"></i>
-                        <span *ngIf="email.errors?.['required']">Email is required.</span>
-                        <span *ngIf="email.errors?.['email']">Please enter a valid email address.</span>
+                        @if (email.errors?.['required']) {<span>Email is required.</span>}
+                        @if (email.errors?.['email']) {<span>Please enter a valid email address.</span>}
                     </div>
+                    }
                 </div>
 
                 <!-- Password -->
@@ -103,7 +109,8 @@
                     </div>
 
                     <!-- Password Strength -->
-                    <div *ngIf="password.value" class="mt-2">
+                    @if (password.value) {
+                    <div class="mt-2">
                         <div class="flex gap-1 mb-1">
                             <div *ngFor="let n of [1,2,3,4]"
                                 class="h-1.5 flex-1 rounded-full transition-all duration-300"
@@ -119,12 +126,14 @@
                             <span class="ml-2 text-gray-400">Use uppercase, numbers &amp; symbols</span>
                         </p>
                     </div>
-                    <div *ngIf="password.invalid && password.touched"
-                        class="mt-1.5 text-red-500 text-xs flex items-center gap-1">
+                    }
+                    @if (password.invalid && password.touched) {
+                    <div class="mt-1.5 text-red-500 text-xs flex items-center gap-1">
                         <i class="fa-solid fa-triangle-exclamation text-xs"></i>
-                        <span *ngIf="password.errors?.['required']">Password is required.</span>
-                        <span *ngIf="password.errors?.['minlength']">Password must be at least 8 characters.</span>
+                        @if (password.errors?.['required']) {<span>Password is required.</span>}
+                        @if (password.errors?.['minlength']) {<span>Password must be at least 8 characters.</span>}
                     </div>
+                    }
                 </div>
 
                 <!-- Confirm Password -->
@@ -145,10 +154,11 @@
                             <i [class]="'fa-solid ' + (showConfirm ? 'fa-eye-slash' : 'fa-eye') + ' text-sm'"></i>
                         </button>
                     </div>
-                    <div *ngIf="registerForm.errors?.['passwordMismatch'] && confirmPassword.touched"
-                        class="mt-1.5 text-red-500 text-xs flex items-center gap-1">
+                    @if (registerForm.errors?.['passwordMismatch'] && confirmPassword.touched) {
+                    <div class="mt-1.5 text-red-500 text-xs flex items-center gap-1">
                         <i class="fa-solid fa-triangle-exclamation text-xs"></i> Passwords do not match.
                     </div>
+                    }
                 </div>
 
                 <!-- Terms -->
@@ -162,25 +172,25 @@
                         <a href="#" class="font-semibold hover:underline" style="color: #2563eb;">Privacy Policy</a>
                     </label>
                 </div>
-                <div *ngIf="agreeToTerms.invalid && agreeToTerms.touched"
-                    class="text-red-500 text-xs flex items-center gap-1 -mt-3">
+                @if (agreeToTerms.invalid && agreeToTerms.touched) {
+                <div class="text-red-500 text-xs flex items-center gap-1 -mt-3">
                     <i class="fa-solid fa-triangle-exclamation text-xs"></i> You must agree to the terms to continue.
                 </div>
+                }
 
                 <!-- Submit -->
                 <button id="register-submit-btn" type="submit" [disabled]="isLoading"
                     class="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl text-white text-sm font-bold transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none mt-2"
                     style="background: linear-gradient(135deg, #1d4ed8, #2563eb); box-shadow: 0 4px 14px rgba(37,99,235,0.35);">
-                    <ng-container *ngIf="!isLoading; else loadingTpl">
+                    @if (!isLoading) {
                         <i class="fa-solid fa-user-plus"></i>Create My Account
-                    </ng-container>
-                    <ng-template #loadingTpl>
+                    } @else {
                         <svg class="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
                             <path class="opacity-75" fill="currentColor"
                                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                         </svg>Creating Account...
-                    </ng-template>
+                    }
                 </button>
             </form>
 

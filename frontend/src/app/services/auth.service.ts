@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { jwtDecode } from 'jwt-decode';
 
 export interface LoginRequest {
     email: string;
@@ -34,7 +35,7 @@ export class AuthService {
             tap(res => {
                 localStorage.setItem(this.TOKEN_KEY, res.token);
                 localStorage.setItem(this.USER_KEY, email);
-                console.log("token", res.token);
+                //console.log("token", res.token);
             })
         );
     }
@@ -60,12 +61,10 @@ export class AuthService {
         return localStorage.getItem(this.USER_KEY);
     }
 
-    /** Decode JWT payload without any external library */
+    /** Decode JWT payload using jwt-decode */
     private decodeToken(token: string): any {
         try {
-            const payload = token.split('.')[1];
-            const decoded = atob(payload.replace(/-/g, '+').replace(/_/g, '/'));
-            return JSON.parse(decoded);
+            return jwtDecode(token);
         } catch {
             return null;
         }

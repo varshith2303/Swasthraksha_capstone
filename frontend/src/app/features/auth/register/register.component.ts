@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import {
@@ -29,8 +29,8 @@ function passwordMatchValidator(control: AbstractControl): ValidationErrors | nu
 export class RegisterComponent {
     registerForm: FormGroup;
     isLoading = false;
-    errorMessage = '';
-    successMessage = '';
+    errorMessage = signal('');
+    successMessage = signal('');
     showPassword = false;
     showConfirm = false;
 
@@ -80,8 +80,8 @@ export class RegisterComponent {
             return;
         }
         this.isLoading = true;
-        this.errorMessage = '';
-        this.successMessage = '';
+        this.errorMessage.set('');
+        this.successMessage.set('');
 
         this.authService.register(
             this.username.value,
@@ -90,15 +90,15 @@ export class RegisterComponent {
         ).subscribe({
             next: () => {
                 this.isLoading = false;
-                this.successMessage = 'Account created successfully! Please log in.';
-                setTimeout(() => this.router.navigate(['/login']), 1500);
+                this.successMessage.set('Account created successfully! Please log in.');
+                setTimeout(() => this.router.navigate(['/login']), 1000);
             },
             error: (err) => {
                 this.isLoading = false;
-                if (err.status === 409) {
-                    this.errorMessage = 'An account with this email already exists.';
+                if (err.status === 400) {
+                    this.errorMessage.set('An account with this email already exists.');
                 } else {
-                    this.errorMessage = 'Registration failed. Please try again.';
+                    this.errorMessage.set('Registration failed. Please try again.');
                 }
             }
         });
