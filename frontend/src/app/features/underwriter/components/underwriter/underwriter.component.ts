@@ -2,9 +2,9 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
-import { UnderwriterService, UnderwriterDecision } from '../../services/underwriter.service';
-import { Application } from '../../services/user.service';
+import { AuthService } from '../../../../services/auth.service';
+import { UnderwriterService, UnderwriterDecision } from '../../../../services/underwriter.service';
+import { Application } from '../../../../services/user.service';
 
 @Component({
     selector: 'app-underwriter',

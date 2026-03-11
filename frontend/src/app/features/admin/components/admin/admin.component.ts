@@ -4,9 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import {
     AdminService, Policy, Underwriter, ApplicationSummary, IssuedPolicy, Claim
-} from '../../services/admin.service';
-import { AuthService } from '../../services/auth.service';
-import { claimsOfficerGuard } from '../../guards/claims-officer.guard';
+} from '../../../../services/admin.service';
+import { AuthService } from '../../../../services/auth.service';
+import { claimsOfficerGuard } from '../../../../guards/claims-officer.guard';
 
 @Component({
     selector: 'app-admin',

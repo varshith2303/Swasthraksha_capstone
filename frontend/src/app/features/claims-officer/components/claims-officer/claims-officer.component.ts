@@ -2,8 +2,8 @@ import { Component, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AdminService, Claim } from '../../services/admin.service';
-import { AuthService } from '../../services/auth.service';
+import { AdminService, Claim } from '../../../../services/admin.service';
+import { AuthService } from '../../../../services/auth.service';
 
 @Component({
     selector: 'app-claims-officer',

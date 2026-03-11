@@ -9,7 +9,7 @@ import {
     AbstractControl,
     ValidationErrors
 } from '@angular/forms';
-import { AuthService } from '../../../services/auth.service';
+import { AuthService } from '../../../../services/auth.service';
 
 function passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
     const password = control.get('password');

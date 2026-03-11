@@ -2,16 +2,16 @@ import { Component, OnInit, signal, computed } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AuthService } from '../../services/auth.service';
-import { UserService, Policy, Application, ApplicationRequest, PolicyAssignment, PolicyMemberRequest } from '../../services/user.service';
+import { AuthService } from '../../../../services/auth.service';
+import { UserService, Policy, Application, ApplicationRequest, PolicyAssignment, PolicyMemberRequest } from '../../../../services/user.service';
 
 // Sub-components
-import { SidebarComponent } from './components/sidebar/sidebar.component';
-import { PolicyApplyComponent } from './components/policy-apply/policy-apply.component';
-import { MyApplicationsComponent } from './components/my-applications/my-applications.component';
-import { MyPoliciesComponent } from './components/my-policies/my-policies.component';
-import { PolicyCatalogComponent } from './components/policy-catalog/policy-catalog.component';
-import { MyClaimsComponent } from './components/my-claims/my-claims.component';
+import { SidebarComponent } from '../sidebar/sidebar.component';
+import { PolicyApplyComponent } from '../policy-apply/policy-apply.component';
+import { MyApplicationsComponent } from '../my-applications/my-applications.component';
+import { MyPoliciesComponent } from '../my-policies/my-policies.component';
+import { PolicyCatalogComponent } from '../policy-catalog/policy-catalog.component';
+import { MyClaimsComponent } from '../my-claims/my-claims.component';
 
 @Component({
   selector: 'app-dashboard',
