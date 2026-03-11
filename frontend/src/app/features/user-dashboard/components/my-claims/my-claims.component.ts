@@ -24,7 +24,8 @@ export class MyClaimsComponent implements OnInit {
         hospitalName: '',
         claimReason: '',
         admissionDate: '',
-        dischargeDate: ''
+        dischargeDate: '',
+        memberId: undefined
     };
 
     constructor(private userService: UserService) { }
@@ -63,6 +64,10 @@ export class MyClaimsComponent implements OnInit {
         return this.activePolicies.find(p => p.policyNumber === this.form.policyNumber) ?? null;
     }
 
+    onPolicyChange(): void {
+        this.form.memberId = undefined;
+    }
+
     latestClaimDate(policyNumber: string): string {
         const dates = this.claims()
             .filter(c => c.policyNumber === policyNumber && c.submittedDate)
@@ -79,7 +84,8 @@ export class MyClaimsComponent implements OnInit {
             hospitalName: '',
             claimReason: '',
             admissionDate: '',
-            dischargeDate: ''
+            dischargeDate: '',
+            memberId: undefined
         };
     }
 

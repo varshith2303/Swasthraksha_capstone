@@ -93,7 +93,7 @@
             <div class="flex-1 flex flex-col justify-center">
                 <span class="text-[0.65rem] font-semibold text-gray-400 uppercase tracking-widest">Due
                     Premium</span>
-                <span class="text-sm font-bold text-gray-900">₹{{ pa.premiumPaid | number }}</span>
+                <span class="text-sm font-bold text-gray-900">₹{{ amountToPay(pa) | number }}</span>
             </div>
             <button id="make-payment-btn" (click)="onMakePayment(pa.id)" [disabled]="actionLoading[pa.id]"
                 class="px-6 py-2.5 rounded-xl text-sm font-bold text-white transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-xl hover:-translate-y-0.5 disabled:opacity-50"

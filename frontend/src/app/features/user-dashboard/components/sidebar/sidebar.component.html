@@ -22,29 +22,35 @@
     <nav class="flex-1 py-6 px-4 flex flex-col gap-2 overflow-y-auto custom-scrollbar">
         <p class="px-3 text-[0.65rem] font-bold text-gray-400 uppercase tracking-widest mb-2">Main Menu</p>
 
-        <a (click)="selectTab('CATALOG')" class="nav-item cursor-pointer" [class.active]="selectedTab === 'CATALOG'">
-            <i class="fa-solid fa-layer-group w-5"></i>
+        <a (click)="selectTab('policies')"
+            class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer"
+            [style]="selectedTab === 'policies' ? 'background:#eff6ff; color:#1d4ed8; font-weight:700;' : 'color:#4b5563;'">
+            <i class="fa-solid fa-layer-group w-5" [style.color]="selectedTab === 'policies' ? '#1d4ed8' : '#9ca3af'"></i>
             Browse Policies
         </a>
 
-        <a (click)="selectTab('APPLY')" class="nav-item cursor-pointer" [class.active]="selectedTab === 'APPLY'">
-            <i class="fa-solid fa-file-signature w-5"></i>
+        <a (click)="selectTab('apply')"
+            class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer"
+            [style]="selectedTab === 'apply' ? 'background:#eff6ff; color:#1d4ed8; font-weight:700;' : 'color:#4b5563;'">
+            <i class="fa-solid fa-file-signature w-5" [style.color]="selectedTab === 'apply' ? '#1d4ed8' : '#9ca3af'"></i>
             Find & Apply
         </a>
 
-        <a (click)="selectTab('MY_APPLICATIONS')" class="nav-item cursor-pointer"
-            [class.active]="selectedTab === 'MY_APPLICATIONS'">
-            <i class="fa-solid fa-folder-open w-5"></i>
+        <a (click)="selectTab('my-applications')"
+            class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer"
+            [style]="selectedTab === 'my-applications' ? 'background:#eff6ff; color:#1d4ed8; font-weight:700;' : 'color:#4b5563;'">
+            <i class="fa-solid fa-folder-open w-5" [style.color]="selectedTab === 'my-applications' ? '#1d4ed8' : '#9ca3af'"></i>
             My Applications
         </a>
 
-        <a (click)="selectTab('MY_POLICIES')" class="nav-item cursor-pointer relative"
-            [class.active]="selectedTab === 'MY_POLICIES'">
-            <i class="fa-solid fa-shield-halved w-5"></i>
+        <a (click)="selectTab('my-policies')"
+            class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer relative"
+            [style]="selectedTab === 'my-policies' ? 'background:#eff6ff; color:#1d4ed8; font-weight:700;' : 'color:#4b5563;'">
+            <i class="fa-solid fa-shield-halved w-5" [style.color]="selectedTab === 'my-policies' ? '#1d4ed8' : '#9ca3af'"></i>
             My Policies
             @if (pendingActionsCount > 0) {
             <span
-                class="absolute right-3 top-1/2 -translate-y-1/2 min-w-[20px] h-5 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center px-1.5 shadow-sm animate-pulse-light">
+                class="absolute right-3 top-1/2 -translate-y-1/2 min-w-[20px] h-5 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center px-1.5 shadow-sm">
                 {{ pendingActionsCount }}
             </span>
             }
@@ -53,8 +59,10 @@
         <div class="w-full h-px bg-gray-100 my-2"></div>
         <p class="px-3 text-[0.65rem] font-bold text-gray-400 uppercase tracking-widest mb-2 mt-2">Claims Services</p>
 
-        <a (click)="selectTab('CLAIMS')" class="nav-item cursor-pointer" [class.active]="selectedTab === 'CLAIMS'">
-            <i class="fa-solid fa-file-medical w-5"></i>
+        <a (click)="selectTab('my-claims')"
+            class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer"
+            [style]="selectedTab === 'my-claims' ? 'background:#eff6ff; color:#1d4ed8; font-weight:700;' : 'color:#4b5563;'">
+            <i class="fa-solid fa-file-medical w-5" [style.color]="selectedTab === 'my-claims' ? '#1d4ed8' : '#9ca3af'"></i>
             Submit & Track Claims
         </a>
 
