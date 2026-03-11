@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { AuthService } from './auth.service';
 
 export interface Policy {
     id?: number;
@@ -96,55 +95,50 @@ export interface Claim {
 export class AdminService {
     private apiUrl = environment.apiUrl;
 
-    constructor(private http: HttpClient, private authService: AuthService) { }
-
-    private getHeaders(): HttpHeaders {
-        const token = this.authService.getToken();
-        return new HttpHeaders({ Authorization: `Bearer ${token}` });
-    }
+    constructor(private http: HttpClient) { }
 
     // ── Policies ──────────────────────────────────────────────────
     getAllPolicies(): Observable<Policy[]> {
-        return this.http.get<Policy[]>(`${this.apiUrl}/policies`, { headers: this.getHeaders() });
+        return this.http.get<Policy[]>(`${this.apiUrl}/policies`);
     }
 
     addPolicy(policy: Policy): Observable<Policy> {
-        return this.http.post<Policy>(`${this.apiUrl}/policies`, policy, { headers: this.getHeaders() });
+        return this.http.post<Policy>(`${this.apiUrl}/policies`, policy);
     }
 
     updatePolicy(id: number, policy: Policy): Observable<Policy> {
-        return this.http.put<Policy>(`${this.apiUrl}/policies/${id}`, policy, { headers: this.getHeaders() });
+        return this.http.put<Policy>(`${this.apiUrl}/policies/${id}`, policy);
     }
 
     deletePolicy(id: number): Observable<void> {
-        return this.http.delete<void>(`${this.apiUrl}/policies/${id}`, { headers: this.getHeaders() });
+        return this.http.delete<void>(`${this.apiUrl}/policies/${id}`);
     }
 
     // ── Underwriters ──────────────────────────────────────────────
     addUnderwriter(underwriter: Underwriter): Observable<Underwriter> {
-        return this.http.post<Underwriter>(`${this.apiUrl}/admin/users`, underwriter, { headers: this.getHeaders() });
+        return this.http.post<Underwriter>(`${this.apiUrl}/admin/users`, underwriter);
     }
 
     getUnderwriters(): Observable<Underwriter[]> {
-        return this.http.get<Underwriter[]>(`${this.apiUrl}/admin/users`, { headers: this.getHeaders() });
+        return this.http.get<Underwriter[]>(`${this.apiUrl}/admin/users`);
     }
 
     // ── Claims Officers ───────────────────────────────────────────
     addClaimsOfficer(officer: ClaimsOfficer): Observable<ClaimsOfficer> {
-        return this.http.post<ClaimsOfficer>(`${this.apiUrl}/admin/claims-officers`, officer, { headers: this.getHeaders() });
+        return this.http.post<ClaimsOfficer>(`${this.apiUrl}/admin/claims-officers`, officer);
     }
 
     getClaimsOfficers(): Observable<ClaimsOfficer[]> {
-        return this.http.get<ClaimsOfficer[]>(`${this.apiUrl}/admin/claims-officers`, { headers: this.getHeaders() });
+        return this.http.get<ClaimsOfficer[]>(`${this.apiUrl}/admin/claims-officers`);
     }
 
     deleteUser(id: number): Observable<void> {
-        return this.http.delete<void>(`${this.apiUrl}/admin/users/${id}`, { headers: this.getHeaders() });
+        return this.http.delete<void>(`${this.apiUrl}/admin/users/${id}`);
     }
 
     // ── Applications ──────────────────────────────────────────────
     getAllApplications(): Observable<ApplicationSummary[]> {
-        return this.http.get<ApplicationSummary[]>(`${this.apiUrl}/applications`, { headers: this.getHeaders() });
+        return this.http.get<ApplicationSummary[]>(`${this.apiUrl}/applications`);
     }
 
     assignApplication(applicationId: number, underwriterEmail: string): Observable<ApplicationSummary> {
@@ -152,32 +146,30 @@ export class AdminService {
         return this.http.patch<ApplicationSummary>(
             `${this.apiUrl}/applications/${applicationId}/assign`,
             null,
-            { headers: this.getHeaders(), params }
+            { params }
         );
     }
 
     // ── Claims ────────────────────────────────────────────────────
     getAllClaims(): Observable<Claim[]> {
-        return this.http.get<Claim[]>(`${this.apiUrl}/claims`, { headers: this.getHeaders() });
+        return this.http.get<Claim[]>(`${this.apiUrl}/claims`);
     }
 
     assignClaim(claimNumber: string, officerEmail: string): Observable<any> {
         const params = new HttpParams().set('officerEmail', officerEmail);
         return this.http.post(`${this.apiUrl}/claims/${claimNumber}/assign`, null, {
-            headers: this.getHeaders(),
             params,
             responseType: 'text'
         });
     }
 
     getOfficerAssignedClaims(): Observable<Claim[]> {
-        return this.http.get<Claim[]>(`${this.apiUrl}/claims/assigned`, { headers: this.getHeaders() });
+        return this.http.get<Claim[]>(`${this.apiUrl}/claims/assigned`);
     }
 
     verifyClaim(claimNumber: string, approve: boolean): Observable<any> {
         const params = new HttpParams().set('approve', approve.toString());
         return this.http.post(`${this.apiUrl}/claims/${claimNumber}/verify`, null, {
-            headers: this.getHeaders(),
             params,
             responseType: 'text'
         });
@@ -185,6 +177,6 @@ export class AdminService {
 
     // ── Issued Policies ───────────────────────────────────────────
     getAllIssuedPolicies(): Observable<IssuedPolicy[]> {
-        return this.http.get<IssuedPolicy[]>(`${this.apiUrl}/policyassignments/all`, { headers: this.getHeaders() });
+        return this.http.get<IssuedPolicy[]>(`${this.apiUrl}/policyassignments/all`);
     }
 }

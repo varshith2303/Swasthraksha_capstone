@@ -1,15 +1,15 @@
 import { HttpInterceptorFn } from '@angular/common/http';
-import { createLinkedSignal } from '@angular/core/primitives/signals';
+import { inject } from '@angular/core';
+import { AuthService } from '../services/auth.service';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  // console.log("Auth Interceptor: request",req);
-  const token=localStorage.getItem("token");
-  if(token){
-    req=req.clone({
-      setHeaders:{
-        Authorization:`Bearer ${token}`
+  const token = inject(AuthService).getToken();
+  if (token) {
+    req = req.clone({
+      setHeaders: {
+        Authorization: `Bearer ${token}`
       }
-    })
+    });
   }
   return next(req);
 };

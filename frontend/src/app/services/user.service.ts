@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { AuthService } from './auth.service';
 
 export interface Policy {
     id?: number;
@@ -107,57 +106,48 @@ export interface ClaimResponse {
 export class UserService {
     private apiUrl = environment.apiUrl;
 
-    constructor(private http: HttpClient, private authService: AuthService) { }
+    constructor(private http: HttpClient) { }
 
-    private getHeaders(): HttpHeaders {
-        const token = this.authService.getToken();
-        return new HttpHeaders({ Authorization: `Bearer ${token}` });
-    }
-
-    // Policies (public - no auth needed by backend, but we send token anyway)
+    // Policies
     getAllPolicies(): Observable<Policy[]> {
-        return this.http.get<Policy[]>(`${this.apiUrl}/policies`, { headers: this.getHeaders() });
+        return this.http.get<Policy[]>(`${this.apiUrl}/policies`);
     }
 
     // Applications
     applyForPolicy(req: ApplicationRequest): Observable<Application> {
-        return this.http.post<Application>(`${this.apiUrl}/applications`, req, { headers: this.getHeaders() });
+        return this.http.post<Application>(`${this.apiUrl}/applications`, req);
     }
 
     getMyApplications(): Observable<Application[]> {
-        return this.http.get<Application[]>(`${this.apiUrl}/applications/myapplications`, { headers: this.getHeaders() });
+        return this.http.get<Application[]>(`${this.apiUrl}/applications/myapplications`);
     }
 
     getMyPolicyAssignments(): Observable<PolicyAssignment[]> {
-        return this.http.get<PolicyAssignment[]>(`${this.apiUrl}/policyassignments/my`, { headers: this.getHeaders() });
+        return this.http.get<PolicyAssignment[]>(`${this.apiUrl}/policyassignments/my`);
     }
 
     makePolicyPayment(policyId: number): Observable<PolicyAssignment> {
-        return this.http.patch<PolicyAssignment>(`${this.apiUrl}/policyassignments/${policyId}/pay`, {}, { headers: this.getHeaders() });
+        return this.http.patch<PolicyAssignment>(`${this.apiUrl}/policyassignments/${policyId}/pay`, {});
     }
 
     // Accept an offer — creates a PolicyAssignment
     acceptApplication(applicationNumber: string): Observable<any> {
         return this.http.post(`${this.apiUrl}/policyassignments`, applicationNumber, {
-            headers: this.getHeaders().set('Content-Type', 'application/json')
+            headers: { 'Content-Type': 'application/json' }
         });
     }
 
     // Decline an offer
     declineApplication(applicationId: number): Observable<Application> {
-        return this.http.patch<Application>(
-            `${this.apiUrl}/applications/${applicationId}/decline`,
-            {},
-            { headers: this.getHeaders() }
-        );
+        return this.http.patch<Application>(`${this.apiUrl}/applications/${applicationId}/decline`, {});
     }
 
     // Claims
     submitClaim(req: ClaimRequest): Observable<ClaimResponse> {
-        return this.http.post<ClaimResponse>(`${this.apiUrl}/claims`, req, { headers: this.getHeaders() });
+        return this.http.post<ClaimResponse>(`${this.apiUrl}/claims`, req);
     }
 
     getMyClaims(): Observable<ClaimResponse[]> {
-        return this.http.get<ClaimResponse[]>(`${this.apiUrl}/claims/my`, { headers: this.getHeaders() });
+        return this.http.get<ClaimResponse[]>(`${this.apiUrl}/claims/my`);
     }
 }
