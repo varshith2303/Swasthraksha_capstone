@@ -1,0 +1,339 @@
+<app-navbar></app-navbar>
+
+<!-- ===== HERO SECTION — Very Light Blue Gradient ===== -->
+<section class="relative min-h-screen flex items-center justify-center overflow-hidden"
+    style="background: linear-gradient(160deg, #dbeafe 0%, #bfdbfe 35%, #93c5fd 65%, #60a5fa 100%);">
+
+    <!-- Soft radial blobs -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute top-1/4 left-1/4 w-[600px] h-[600px] rounded-full"
+            style="background: radial-gradient(circle, rgba(147,197,253,0.35) 0%, transparent 65%);"></div>
+        <div class="absolute bottom-0 right-1/4 w-[500px] h-[500px] rounded-full"
+            style="background: radial-gradient(circle, rgba(191,219,254,0.45) 0%, transparent 65%);"></div>
+        <div class="absolute top-0 right-0 w-[400px] h-[400px] rounded-full"
+            style="background: radial-gradient(circle, rgba(219,234,254,0.5) 0%, transparent 65%);"></div>
+    </div>
+
+    <div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-40 text-center">
+
+        <!-- Pill badge -->
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-8 text-sm font-semibold animate-fade-in"
+            style="background: rgba(219,234,254,0.8); border: 1px solid #93c5fd; color: #1d4ed8; backdrop-filter: blur(10px);">
+            <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse inline-block"></span>
+            India's Most Trusted Health Insurance Platform
+        </div>
+
+        <!-- Headline -->
+        <h1 class="text-5xl md:text-7xl font-black mb-6 leading-tight tracking-tight animate-slide-up"
+            style="color: #0f172a;">
+            Protect What<br>
+            <span
+                style="background: linear-gradient(135deg, #1d4ed8, #2563eb, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                Matters Most
+            </span>
+        </h1>
+
+        <!-- Subheadline -->
+        <p class="text-lg md:text-xl max-w-2xl mx-auto mb-12 leading-relaxed animate-slide-up"
+            style="color: #475569; animation-delay: 0.2s">
+            Comprehensive health insurance for you and your family. Get covered in minutes, not days.
+            <span class="font-semibold" style="color: #1d4ed8;"> Starting at just ₹499/month.</span>
+        </p>
+
+        <!-- CTAs -->
+        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16 animate-slide-up"
+            style="animation-delay:0.3s">
+            <a routerLink="/register"
+                class="inline-flex items-center gap-2 px-8 py-4 text-base font-bold rounded-xl text-white shadow-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
+                style="background: linear-gradient(135deg, #1d4ed8, #2563eb); box-shadow: 0 8px 24px rgba(37,99,235,0.35);">
+                <i class="fa-solid fa-shield-heart"></i>
+                Get Protected Now
+            </a>
+            <a routerLink="/login"
+                class="inline-flex items-center gap-2 px-8 py-4 text-base font-semibold rounded-xl transition-all duration-300 hover:bg-blue-50"
+                style="color: #1d4ed8; border: 2px solid #93c5fd; background: rgba(255,255,255,0.7);">
+                <i class="fa-solid fa-sign-in-alt"></i>
+                Already a Member?
+            </a>
+        </div>
+
+        <!-- Trust badges -->
+        <div class="flex flex-wrap justify-center gap-6 text-sm animate-fade-in"
+            style="color: #64748b; animation-delay:0.5s">
+            <span class="flex items-center gap-2"><i class="fa-solid fa-check-circle" style="color: #2563eb;"></i>No
+                Hidden Charges</span>
+            <span class="flex items-center gap-2"><i class="fa-solid fa-check-circle" style="color: #2563eb;"></i>IRDAI
+                Registered</span>
+            <span class="flex items-center gap-2"><i class="fa-solid fa-check-circle" style="color: #2563eb;"></i>Cancel
+                Anytime</span>
+            <span class="flex items-center gap-2"><i class="fa-solid fa-check-circle" style="color: #2563eb;"></i>100%
+                Digital Process</span>
+        </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce" style="color: #93c5fd;">
+        <i class="fa-solid fa-chevron-down text-xl"></i>
+    </div>
+</section>
+
+<!-- ===== STATS SECTION ===== -->
+<section class="py-16 bg-white border-b border-gray-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+            <div *ngFor="let stat of stats" class="text-center group">
+                <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl mb-4 group-hover:scale-110 transition-all duration-300"
+                    style="background: linear-gradient(135deg, #eff6ff, #dbeafe); border: 1px solid #93c5fd;">
+                    <i [class]="'fa-solid ' + stat.icon + ' text-xl'" style="color: #2563eb;"></i>
+                </div>
+                <div class="text-3xl md:text-4xl font-black mb-1"
+                    style="background: linear-gradient(135deg, #1d4ed8, #2563eb); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                    {{ stat.value }}
+                </div>
+                <div class="text-gray-500 text-sm font-medium">{{ stat.label }}</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== FEATURES SECTION ===== -->
+<section id="features" class="py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold mb-4"
+                style="background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe;">
+                Why Choose Us
+            </div>
+            <h2 class="text-4xl md:text-5xl font-black mb-4 leading-tight" style="color: #0f172a;">
+                Everything You Need,<br>
+                <span
+                    style="background: linear-gradient(135deg, #1d4ed8, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                    All in One Place
+                </span>
+            </h2>
+            <p class="text-gray-500 text-lg max-w-2xl mx-auto">
+                We've simplified health insurance so you can focus on what matters — your health and your family.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div *ngFor="let feature of features"
+                class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group cursor-default hover:border-blue-100">
+                <div
+                    [class]="'w-12 h-12 rounded-xl bg-gradient-to-br ' + feature.color + ' flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300 shadow-md'">
+                    <i [class]="'fa-solid ' + feature.icon + ' text-white text-lg'"></i>
+                </div>
+                <h3 class="text-lg font-bold text-gray-900 mb-3">{{ feature.title }}</h3>
+                <p class="text-gray-500 text-sm leading-relaxed">{{ feature.description }}</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== PLANS SECTION ===== -->
+<section id="plans" class="py-24" style="background: #f8fbff;">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold mb-4"
+                style="background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe;">
+                Pricing Plans
+            </div>
+            <h2 class="text-4xl md:text-5xl font-black mb-4 leading-tight" style="color: #0f172a;">
+                Affordable Plans for<br>
+                <span
+                    style="background: linear-gradient(135deg, #1d4ed8, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                    Every Family
+                </span>
+            </h2>
+            <p class="text-gray-500 text-lg max-w-2xl mx-auto">Transparent pricing, no hidden fees. Choose the plan that
+                fits your needs.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div *ngFor="let plan of plans"
+                class="relative bg-white rounded-2xl p-8 border-2 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
+                [style.border-color]="plan.popular ? '#2563eb' : '#e5e7eb'"
+                [style.box-shadow]="plan.popular ? '0 0 0 4px rgba(37,99,235,0.08), 0 20px 60px rgba(37,99,235,0.12)' : ''">
+
+                <div *ngIf="plan.popular"
+                    class="absolute -top-4 left-1/2 -translate-x-1/2 px-6 py-1.5 text-white text-xs font-bold rounded-full shadow-lg"
+                    style="background: linear-gradient(135deg, #1d4ed8, #3b82f6);">
+                    MOST POPULAR
+                </div>
+
+                <div class="text-center mb-8">
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">{{ plan.name }}</h3>
+                    <div class="flex items-baseline justify-center gap-1 mb-1">
+                        <span class="text-4xl font-black"
+                            style="background: linear-gradient(135deg, #1d4ed8, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                            {{ plan.price }}
+                        </span>
+                        <span class="text-gray-400 text-sm">{{ plan.period }}</span>
+                    </div>
+                    <p class="text-gray-400 text-sm">Coverage up to <span class="font-semibold"
+                            style="color: #2563eb;">{{ plan.coverage }}</span></p>
+                </div>
+
+                <ul class="space-y-3 mb-8">
+                    <li *ngFor="let f of plan.features" class="flex items-center gap-3 text-sm text-gray-600">
+                        <i class="fa-solid fa-check flex-shrink-0" style="color: #2563eb;"></i>{{ f }}
+                    </li>
+                </ul>
+
+                <a routerLink="/register"
+                    class="block text-center w-full py-3 rounded-xl font-semibold transition-all duration-300 hover:-translate-y-0.5"
+                    [style]="plan.popular
+            ? 'background: linear-gradient(135deg, #1d4ed8, #3b82f6); color: white; box-shadow: 0 4px 14px rgba(37,99,235,0.4);'
+            : 'border: 2px solid #2563eb; color: #2563eb; background: transparent;'">
+                    Get Started
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== TESTIMONIALS SECTION ===== -->
+<section id="testimonials" class="py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold mb-4"
+                style="background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe;">
+                Customer Stories
+            </div>
+            <h2 class="text-4xl md:text-5xl font-black mb-4" style="color: #0f172a;">
+                Loved by
+                <span
+                    style="background: linear-gradient(135deg, #1d4ed8, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                    50,000+ Families
+                </span>
+            </h2>
+            <p class="text-gray-500 text-lg max-w-2xl mx-auto">Real stories from real people who chose SwasthaRaksha for
+                their peace of mind.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div *ngFor="let t of testimonials"
+                class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 hover:border-blue-100">
+                <div class="flex gap-1 mb-4">
+                    <i *ngFor="let s of [1,2,3,4,5]" class="fa-solid fa-star text-yellow-400 text-sm"></i>
+                </div>
+                <p class="text-gray-500 text-sm leading-relaxed mb-6 italic">"{{ t.text }}"</p>
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0"
+                        style="background: linear-gradient(135deg, #1d4ed8, #3b82f6);">
+                        {{ t.avatar }}
+                    </div>
+                    <div>
+                        <div class="text-gray-900 font-semibold text-sm">{{ t.name }}</div>
+                        <div class="text-gray-400 text-xs">{{ t.role }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== CTA SECTION — Light Blue Gradient ===== -->
+<section class="py-24 relative overflow-hidden"
+    style="background: linear-gradient(160deg, #dbeafe 0%, #bfdbfe 50%, #93c5fd 100%);">
+    <div class="absolute inset-0 pointer-events-none overflow-hidden">
+        <div class="absolute top-0 left-1/4 w-96 h-96 rounded-full opacity-40"
+            style="background: radial-gradient(circle, #93c5fd, transparent 70%);"></div>
+        <div class="absolute bottom-0 right-1/4 w-80 h-80 rounded-full opacity-30"
+            style="background: radial-gradient(circle, #bfdbfe, transparent 70%);"></div>
+    </div>
+
+    <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-4xl md:text-5xl font-black mb-6" style="color: #0f172a;">
+            Ready to Secure Your <span style="color: #1d4ed8;">Future?</span>
+        </h2>
+        <p class="text-lg mb-10 max-w-2xl mx-auto" style="color: #475569;">
+            Join 50,000+ families who trust SwasthaRaksha. Get covered in under 5 minutes.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a routerLink="/register"
+                class="inline-flex items-center justify-center gap-2 px-10 py-4 text-lg font-bold rounded-xl text-white shadow-xl hover:shadow-2xl hover:-translate-y-0.5 transition-all duration-300"
+                style="background: linear-gradient(135deg, #1d4ed8, #3b82f6); box-shadow: 0 8px 24px rgba(37,99,235,0.35);">
+                <i class="fa-solid fa-user-plus"></i>Create Your Account
+            </a>
+            <a href="tel:+918001234567"
+                class="inline-flex items-center justify-center gap-2 px-10 py-4 text-lg font-semibold rounded-xl transition-all duration-300 hover:bg-blue-50"
+                style="color: #1d4ed8; border: 2px solid #93c5fd; background: rgba(255,255,255,0.7);">
+                <i class="fa-solid fa-phone" style="color: #2563eb;"></i>Call Us: 1800-123-4567
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="bg-gray-50 border-t border-gray-200 py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+
+            <!-- Brand -->
+            <div class="col-span-1 md:col-span-2">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 rounded-xl flex items-center justify-center shadow-md"
+                        style="background: linear-gradient(135deg, #1d4ed8, #3b82f6);">
+                        <i class="fa-solid fa-shield-heart text-white text-lg"></i>
+                    </div>
+                    <span class="text-xl font-bold">
+                        <span
+                            style="background: linear-gradient(135deg, #1d4ed8, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Swastha</span><span
+                            class="text-gray-900">Raksha</span>
+                    </span>
+                </div>
+                <p class="text-gray-500 text-sm leading-relaxed max-w-xs mb-6">
+                    India's most trusted health insurance platform. Protecting families since 2020 with transparent,
+                    affordable plans.
+                </p>
+                <div class="flex gap-3">
+                    <a href="#"
+                        class="w-9 h-9 rounded-lg bg-white border border-gray-200 flex items-center justify-center text-gray-400 hover:text-blue-600 hover:border-blue-300 transition-all duration-300 shadow-sm">
+                        <i class="fa-brands fa-twitter text-sm"></i>
+                    </a>
+                    <a href="#"
+                        class="w-9 h-9 rounded-lg bg-white border border-gray-200 flex items-center justify-center text-gray-400 hover:text-blue-600 hover:border-blue-300 transition-all duration-300 shadow-sm">
+                        <i class="fa-brands fa-linkedin-in text-sm"></i>
+                    </a>
+                    <a href="#"
+                        class="w-9 h-9 rounded-lg bg-white border border-gray-200 flex items-center justify-center text-gray-400 hover:text-blue-600 hover:border-blue-300 transition-all duration-300 shadow-sm">
+                        <i class="fa-brands fa-instagram text-sm"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div>
+                <h4 class="text-gray-900 font-semibold mb-4 text-sm">Quick Links</h4>
+                <ul class="space-y-3 text-sm text-gray-500">
+                    <li><a routerLink="/" class="hover:text-blue-600 transition-colors duration-300">Home</a></li>
+                    <li><a href="#features" class="hover:text-blue-600 transition-colors duration-300">Features</a></li>
+                    <li><a href="#plans" class="hover:text-blue-600 transition-colors duration-300">Plans &amp;
+                            Pricing</a></li>
+                    <li><a href="#testimonials"
+                            class="hover:text-blue-600 transition-colors duration-300">Testimonials</a></li>
+                </ul>
+            </div>
+
+            <!-- Account -->
+            <div>
+                <h4 class="text-gray-900 font-semibold mb-4 text-sm">Account</h4>
+                <ul class="space-y-3 text-sm text-gray-500">
+                    <li><a routerLink="/login" class="hover:text-blue-600 transition-colors duration-300">Login</a></li>
+                    <li><a routerLink="/register"
+                            class="hover:text-blue-600 transition-colors duration-300">Register</a></li>
+                    <li><a href="#" class="hover:text-blue-600 transition-colors duration-300">Privacy Policy</a></li>
+                    <li><a href="#" class="hover:text-blue-600 transition-colors duration-300">Terms of Service</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="border-t border-gray-200 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p class="text-gray-400 text-sm">&copy; 2026 SwasthaRaksha. All rights reserved. IRDAI Reg. No. 123456.</p>
+            <p class="text-gray-400 text-sm flex items-center gap-1">
+                Made with <i class="fa-solid fa-heart text-red-400 text-xs animate-pulse mx-1"></i> for healthier India
+            </p>
+        </div>
+    </div>
+</footer>

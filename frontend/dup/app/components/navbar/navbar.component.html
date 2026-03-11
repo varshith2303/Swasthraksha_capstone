@@ -1,0 +1,100 @@
+<nav class="fixed top-0 left-0 right-0 z-50 transition-all duration-500" [ngClass]="isScrolled
+    ? 'bg-white/95 backdrop-blur-xl border-b border-blue-100 py-3 shadow-sm'
+    : 'py-5'">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between">
+
+            <!-- Brand Logo -->
+            <a routerLink="/" class="flex items-center gap-3 group">
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300"
+                    style="background: linear-gradient(135deg, #1d4ed8, #3b82f6);">
+                    <i class="fa-solid fa-shield-heart text-white text-lg"></i>
+                </div>
+                <span class="text-xl font-bold">
+                    <span
+                        style="background: linear-gradient(135deg, #1d4ed8, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Swastha</span><span
+                        class="text-slate-900">Raksha</span>
+                </span>
+            </a>
+
+            <!-- Desktop Navigation -->
+            <div class="hidden md:flex items-center gap-8">
+                <a routerLink="/" routerLinkActive="font-semibold" [routerLinkActiveOptions]="{exact: true}"
+                    class="font-medium transition-colors duration-300 text-sm hover:text-blue-700"
+                    style="color: #1e40af;">Home</a>
+                <a href="#features" class="font-medium transition-colors duration-300 text-sm hover:text-blue-700"
+                    style="color: #1e40af;">Features</a>
+                <a href="#plans" class="font-medium transition-colors duration-300 text-sm hover:text-blue-700"
+                    style="color: #1e40af;">Plans</a>
+                <a href="#testimonials" class="font-medium transition-colors duration-300 text-sm hover:text-blue-700"
+                    style="color: #1e40af;">Testimonials</a>
+            </div>
+
+            <!-- CTA Buttons -->
+            <div class="hidden md:flex items-center gap-3">
+                <ng-container *ngIf="!isLoggedIn; else loggedInBlock">
+                    <a routerLink="/login"
+                        class="px-5 py-2 text-sm font-semibold border-2 rounded-xl transition-all duration-300 hover:bg-blue-50"
+                        style="border-color: #93c5fd; color: #1d4ed8; background: rgba(255,255,255,0.6);">
+                        Log In
+                    </a>
+                    <a routerLink="/register"
+                        class="inline-flex items-center gap-2 px-5 py-2 text-sm font-bold rounded-xl text-white shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
+                        style="background: linear-gradient(135deg, #1d4ed8, #3b82f6); box-shadow: 0 4px 14px rgba(37,99,235,0.35);">
+                        <i class="fa-solid fa-rocket text-xs"></i>
+                        Get Started
+                    </a>
+                </ng-container>
+                <ng-template #loggedInBlock>
+                    <a routerLink="/dashboard"
+                        class="px-5 py-2 text-sm font-semibold border-2 rounded-xl transition-all duration-300 hover:bg-blue-50"
+                        style="border-color: #93c5fd; color: #1d4ed8; background: rgba(255,255,255,0.6);">
+                        Dashboard
+                    </a>
+                    <button (click)="logout()"
+                        class="inline-flex items-center gap-2 px-5 py-2 text-sm font-bold rounded-xl text-white shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
+                        style="background: linear-gradient(135deg, #1d4ed8, #3b82f6); box-shadow: 0 4px 14px rgba(37,99,235,0.35);">
+                        <i class="fa-solid fa-right-from-bracket text-xs"></i>
+                        Logout
+                    </button>
+                </ng-template>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button id="mobile-menu-btn" (click)="toggleMenu()"
+                class="md:hidden p-2 rounded-lg transition-all duration-300 hover:bg-blue-100" style="color: #1d4ed8;">
+                <i class="fa-solid text-lg" [class.fa-bars]="!isMenuOpen" [class.fa-xmark]="isMenuOpen"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div *ngIf="isMenuOpen" class="md:hidden mt-4 pb-4 border-t border-blue-200 animate-fade-in">
+            <div class="flex flex-col gap-3 pt-4">
+                <a routerLink="/" (click)="toggleMenu()"
+                    class="py-2 font-medium transition-colors duration-300 hover:text-blue-700"
+                    style="color: #1e40af;">Home</a>
+                <a href="#features" (click)="toggleMenu()"
+                    class="py-2 font-medium transition-colors duration-300 hover:text-blue-700"
+                    style="color: #1e40af;">Features</a>
+                <a href="#plans" (click)="toggleMenu()"
+                    class="py-2 font-medium transition-colors duration-300 hover:text-blue-700"
+                    style="color: #1e40af;">Plans</a>
+                <a href="#testimonials" (click)="toggleMenu()"
+                    class="py-2 font-medium transition-colors duration-300 hover:text-blue-700"
+                    style="color: #1e40af;">Testimonials</a>
+                <div class="flex flex-col gap-2 mt-2">
+                    <a routerLink="/login" (click)="toggleMenu()"
+                        class="text-center py-2.5 text-sm font-semibold border-2 rounded-xl transition-all duration-300 hover:bg-blue-50"
+                        style="border-color: #93c5fd; color: #1d4ed8;">
+                        Log In
+                    </a>
+                    <a routerLink="/register" (click)="toggleMenu()"
+                        class="text-center py-2.5 text-sm font-bold text-white rounded-xl transition-all duration-300"
+                        style="background: linear-gradient(135deg, #1d4ed8, #3b82f6);">
+                        Get Started
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>

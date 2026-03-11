@@ -1,0 +1,5 @@
+/* All layout and visual styles now handled via Tailwind utility classes in the HTML template */
+:host {
+    display: block;
+    height: 100vh;
+}

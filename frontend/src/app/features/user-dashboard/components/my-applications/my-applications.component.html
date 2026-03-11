@@ -1,0 +1,93 @@
+@if (myApplicationsError) {
+<div class="flex items-center gap-3 px-4 py-3.5 rounded-xl text-sm font-medium animate-fade-in mb-6"
+    style="background: #fef2f2; border: 1px solid #fecaca; color: #dc2626;">
+    <i class="fa-solid fa-circle-exclamation text-base"></i>{{ myApplicationsError }}
+</div>
+}
+
+@if (myApplicationsLoading) {
+<div
+    class="flex flex-col items-center justify-center gap-4 p-20 bg-white rounded-2xl border border-gray-100 shadow-sm text-gray-400">
+    <span class="inline-block w-9 h-9 border-[3px] border-blue-200 border-t-blue-600 rounded-full animate-spin"></span>
+    <p class="text-sm">Loading your applications...</p>
+</div>
+} @else if (applications.length === 0) {
+<div
+    class="flex flex-col items-center justify-center gap-4 p-20 bg-white rounded-2xl border border-gray-100 shadow-sm text-gray-400">
+    <i class="fa-solid fa-file-signature text-5xl opacity-25"></i>
+    <p class="text-sm font-medium">No applications found.</p>
+</div>
+} @else {
+<div class="grid grid-cols-[repeat(auto-fill,minmax(350px,1fr))] gap-5">
+    @for (app of applications; track app.id) {
+    <div
+        class="bg-white rounded-2xl p-6 flex flex-col gap-5 border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+        <div class="flex items-start justify-between gap-4 border-b border-gray-50 pb-4">
+            <div class="flex flex-col gap-1">
+                <span class="text-[0.65rem] font-bold text-gray-400 uppercase tracking-widest">Application</span>
+                <span class="text-sm font-bold text-gray-800 font-mono">{{ app.applicationNumber || ('APP' + app.id)
+                    }}</span>
+            </div>
+            <span [class]="getApplicationStatusClass(app.status)"
+                class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[0.72rem] font-bold tracking-wide border shadow-sm whitespace-nowrap">
+                <span class="w-1.5 h-1.5 rounded-full bg-current opacity-70"></span>
+                {{ getApplicationStatusLabel(app.status) }}
+            </span>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm"
+                style="background: #f8fafc; border: 1px solid #e2e8f0; color: #475569;">
+                <i class="fa-solid fa-file-contract text-base"></i>
+            </div>
+            <div class="flex flex-col">
+                <span class="text-[0.65rem] font-bold text-gray-400 uppercase tracking-widest">Policy Selected</span>
+                <span class="text-sm font-bold text-gray-900">{{ app.policy.policyName || 'Unknown Policy' }}</span>
+                <span class="text-[0.7rem] font-medium text-gray-500 mt-0.5">Coverage: ₹{{ app.requestedCoverage |
+                    number }}</span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+            <div class="flex flex-col gap-1 rounded-lg px-3 py-2.5 shadow-sm border border-gray-100"
+                style="background: #fafafa;">
+                <span class="text-[0.62rem] font-bold text-gray-400 uppercase tracking-widest">Plan Type</span>
+                <span class="text-sm font-bold text-gray-800">{{ app.planType || 'INDIVIDUAL' }}</span>
+            </div>
+            <div class="flex flex-col gap-1 rounded-lg px-3 py-2.5 shadow-sm border border-gray-100"
+                style="background: #fafafa;">
+                <span class="text-[0.62rem] font-bold text-gray-400 uppercase tracking-widest">Members</span>
+                <div class="flex items-center gap-1.5">
+                    <i class="fa-solid fa-users text-[0.7rem] text-blue-500"></i>
+                    <span class="text-sm font-bold text-gray-800">{{ app.members?.length || 1 }}</span>
+                </div>
+            </div>
+            <div class="flex flex-col gap-1 rounded-lg px-3 py-2.5 shadow-sm border border-gray-100"
+                style="background: #fafafa;">
+                <span class="text-[0.62rem] font-bold text-gray-400 uppercase tracking-widest">Duration</span>
+                <span class="text-sm font-bold text-gray-800">{{ app.duration }} year(s)</span>
+            </div>
+            <div class="flex flex-col gap-1 rounded-lg px-3 py-2.5 shadow-sm border border-gray-100"
+                style="background: #fafafa;">
+                <span class="text-[0.62rem] font-bold text-gray-400 uppercase tracking-widest">Risk Score</span>
+                <span class="text-sm font-semibold text-gray-800">{{ app.riskScore ? (app.riskScore.toFixed(2)) : 'N/A'
+                    }}</span>
+            </div>
+        </div>
+
+        @if (app.status === 'APPROVED' || app.status === 'POLICY_ISSUED') {
+        <div class="mt-2 flex flex-col gap-2 p-3 rounded-xl border" style="background: #f0fdf4; border-color: #bbf7d0;">
+            <div class="flex justify-between items-center text-sm">
+                <span class="text-green-700 font-medium">Proposed Premium:</span>
+                <span class="font-bold text-green-800">₹{{ app.proposedPremium | number }}</span>
+            </div>
+            <div class="flex justify-between items-center text-sm">
+                <span class="text-green-700 font-medium">Final Premium:</span>
+                <span class="font-bold text-green-800">₹{{ app.finalPremium | number }}</span>
+            </div>
+        </div>
+        }
+    </div>
+    }
+</div>
+}

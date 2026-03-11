@@ -1,0 +1,174 @@
+import { Component, Input, Output, EventEmitter, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { PolicyAssignment, UserService } from '../../../../services/user.service';
+
+@Component({
+    selector: 'app-my-policies',
+    standalone: true,
+    imports: [CommonModule],
+    template: `
+        @if (myPoliciesError) {
+        <div class="flex items-center gap-3 px-4 py-3.5 rounded-xl text-sm font-medium animate-fade-in"
+            style="background: #fef2f2; border: 1px solid #fecaca; color: #dc2626;">
+            <i class="fa-solid fa-circle-exclamation text-base"></i>{{ myPoliciesError }}
+        </div>
+        }
+
+        @if (myPoliciesLoading) {
+        <div
+            class="flex flex-col items-center justify-center gap-4 p-20 bg-white rounded-2xl border border-gray-100 shadow-sm text-gray-400">
+            <span
+                class="inline-block w-9 h-9 border-[3px] border-blue-200 border-t-blue-600 rounded-full animate-spin"></span>
+            <p class="text-sm">Loading your policies...</p>
+        </div>
+        } @else if (policies.length === 0) {
+        <div
+            class="flex flex-col items-center justify-center gap-4 p-20 bg-white rounded-2xl border border-gray-100 shadow-sm text-gray-400">
+            <i class="fa-solid fa-shield-halved text-5xl opacity-25"></i>
+            <p class="text-sm font-medium">No active policies found.</p>
+        </div>
+        } @else {
+        <div class="grid grid-cols-[repeat(auto-fill,minmax(400px,1fr))] gap-5">
+            @for (pa of policies; track pa.id) {
+            <div
+                class="bg-white rounded-2xl p-6 flex flex-col gap-5 border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                <div class="flex items-start justify-between gap-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm"
+                            style="background: #eff6ff; border: 1px solid #bfdbfe; color: #1d4ed8;">
+                            <i class="fa-solid fa-shield-halved text-base"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-[0.95rem] font-bold text-gray-900 mb-0.5">{{
+                                pa.application.policy.policyName }}</h3>
+                            <span class="inline-block text-[0.72rem] font-semibold font-mono px-2 py-0.5 rounded shadow-sm"
+                                style="background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe;">{{
+                                pa.policyNumber }}</span>
+                        </div>
+                    </div>
+                    <span [class]="getPolicyStatusClass(pa.status)"
+                        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[0.72rem] font-bold tracking-wide border whitespace-nowrap shadow-sm">
+                        <span class="w-1.5 h-1.5 rounded-full bg-current opacity-70"></span>
+                        {{ getPolicyStatusLabel(pa.status) }}
+                    </span>
+                 </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div class="flex flex-col gap-0.5 rounded-lg px-3 py-2.5"
+                        style="background: #f9fafb; border: 1px solid #f3f4f6;">
+                        <span
+                            class="text-[0.62rem] font-semibold text-gray-400 uppercase tracking-widest">Coverage</span>
+                        <span class="text-sm font-semibold text-gray-800">₹{{ pa.coverageAmount | number }}</span>
+                    </div>
+                    <div class="flex flex-col gap-0.5 rounded-lg px-3 py-2.5"
+                        style="background: #f9fafb; border: 1px solid #f3f4f6;">
+                        <span class="text-[0.62rem] font-semibold text-gray-400 uppercase tracking-widest">Premium
+                            Paid</span>
+                        <span class="text-sm font-semibold text-gray-800">₹{{ pa.premiumPaid | number }}</span>
+                    </div>
+                    <div class="flex flex-col gap-0.5 rounded-lg px-3 py-2.5"
+                        [style]="installmentsLeft(pa) === 0
+                            ? 'background:#ecfdf5; border:1px solid #a7f3d0;'
+                            : 'background:#eff6ff; border:1px solid #bfdbfe;'">
+                        <span class="text-[0.62rem] font-semibold uppercase tracking-widest"
+                            [style]="installmentsLeft(pa) === 0 ? 'color:#059669' : 'color:#1d4ed8'">Installments Left</span>
+                        <span class="text-sm font-semibold"
+                            [style]="installmentsLeft(pa) === 0 ? 'color:#059669' : 'color:#1d4ed8'">
+                            {{ installmentsLeft(pa) }} / {{ pa.totalInstallments ?? '—' }}
+                        </span>
+                    </div>
+                    <div class="flex flex-col gap-0.5 rounded-lg px-3 py-2.5 col-span-2"
+                        style="background:#fffbeb; border:1px solid #fde68a;">
+                        <span class="text-[0.62rem] font-semibold text-amber-500 uppercase tracking-widest">Amount to Pay</span>
+                        <span class="text-sm font-semibold text-amber-700">
+                            ₹{{ amountToPay(pa) | number }}
+                            <span class="text-[0.65rem] font-normal text-amber-500 ml-1">remaining</span>
+                        </span>
+                    </div>
+                    @if (pa.startDate) {
+                    <div class="flex flex-col gap-0.5 rounded-lg px-3 py-2.5"
+                        style="background: #f9fafb; border: 1px solid #f3f4f6;">
+                        <span class="text-[0.62rem] font-semibold text-gray-400 uppercase tracking-widest">Start
+                            Date</span>
+                        <span class="text-sm font-semibold text-gray-800">{{ pa.startDate | date }}</span>
+                    </div>
+                    <div class="flex flex-col gap-0.5 rounded-lg px-3 py-2.5"
+                        style="background: #f9fafb; border: 1px solid #f3f4f6;">
+                        <span class="text-[0.62rem] font-semibold text-gray-400 uppercase tracking-widest">End
+                            Date</span>
+                        <span class="text-sm font-semibold text-gray-800">{{ pa.endDate | date }}</span>
+                    </div>
+                    }
+                </div>
+
+                @if (pa.status === 'PENDING_PAYMENT') {
+                <div class="flex gap-3 border-t border-gray-100 pt-5 mt-auto">
+                    <div class="flex-1 flex flex-col justify-center">
+                        <span class="text-[0.65rem] font-semibold text-gray-400 uppercase tracking-widest">Due
+                            Premium</span>
+                        <span class="text-sm font-bold text-gray-900">₹{{ pa.premiumPaid | number }}</span>
+                    </div>
+                    <button id="make-payment-btn" (click)="onMakePayment(pa.id)" [disabled]="actionLoading[pa.id]"
+                        class="px-6 py-2.5 rounded-xl text-sm font-bold text-white transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-xl hover:-translate-y-0.5 disabled:opacity-50"
+                        style="background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 4px 14px rgba(16,185,129,0.3);">
+                        @if (actionLoading[pa.id]) {
+                        <span class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                        } @else {
+                        <i class="fa-solid fa-credit-card text-xs"></i>
+                        }
+                        Make Payment
+                    </button>
+                </div>
+                }
+            </div>
+            }
+        </div>
+        }
+  `
+})
+export class MyPoliciesComponent {
+    @Input() policies: PolicyAssignment[] = [];
+    @Input() myPoliciesLoading: boolean = false;
+    @Input() myPoliciesError: string = '';
+    @Input() actionLoading: Record<number, boolean> = {};
+
+    @Output() paymentCompleted = new EventEmitter<void>();
+
+    constructor(private userService: UserService) { }
+
+    installmentsLeft(pa: PolicyAssignment): number {
+        return (pa.totalInstallments ?? 0) - (pa.paidInstallments ?? 0);
+    }
+
+    amountToPay(pa: PolicyAssignment): number {
+        return Math.max(0, pa.totalPremiumAmount - pa.premiumPaid);
+    }
+
+    getPolicyStatusClass(status: string): string {
+        switch (status) {
+            case 'PENDING_PAYMENT': return 'bg-amber-50 text-amber-600 border-amber-200';
+            case 'ACTIVE': return 'bg-green-50 text-green-600 border-green-200';
+            case 'EXPIRED': return 'bg-red-50 text-red-600 border-red-200';
+            default: return 'bg-gray-50 text-gray-600 border-gray-200';
+        }
+    }
+
+    getPolicyStatusLabel(status: string): string {
+        switch (status) {
+            case 'PENDING_PAYMENT': return 'Payment Pending';
+            case 'ACTIVE': return 'Active';
+            case 'EXPIRED': return 'Expired';
+            default: return status.replace('_', ' ');
+        }
+    }
+
+    onMakePayment(id: number) {
+        this.actionLoading[id] = true;
+        this.userService.makePolicyPayment(id).subscribe({
+            next: () => {
+                this.actionLoading[id] = false;
+                this.paymentCompleted.emit();
+            },
+            error: () => this.actionLoading[id] = false
+        });
+    }
+}

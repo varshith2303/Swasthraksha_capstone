@@ -1,0 +1,259 @@
+<div class="bg-white rounded-3xl overflow-hidden border border-gray-100 shadow-sm mb-6">
+
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 px-8 py-6 border-b border-blue-50 relative overflow-hidden"
+        style="background: linear-gradient(135deg, #eff6ff 0%, #ffffff 100%);">
+
+        <div
+            class="absolute right-0 top-0 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4 pointer-events-none">
+        </div>
+
+        <div class="flex items-center gap-4 relative z-10">
+            <div class="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-sm"
+                style="background: linear-gradient(135deg, #1d4ed8, #2563eb);">
+                <i class="fa-solid fa-file-contract text-white text-xl"></i>
+            </div>
+            <div>
+                <h2 class="text-xl font-bold text-gray-900 mb-0.5">Policy Application</h2>
+                <p class="text-sm text-gray-500 font-medium">Fill in the details to apply for coverage.</p>
+            </div>
+        </div>
+
+        <!-- Plan Type Toggle (Only if selected policy allows Both, or no policy selected yet) -->
+        @if (!selectedPolicy || selectedPolicy.planType === 'BOTH') {
+        <div class="flex bg-gray-100/80 p-1 rounded-xl shadow-inner relative z-10 border border-gray-200/60 max-w-fit">
+            <button type="button" (click)="togglePlanType('INDIVIDUAL')"
+                class="px-5 py-2.5 rounded-lg text-xs font-bold transition-all relative z-10"
+                [class.text-blue-700]="planType === 'INDIVIDUAL'" [class.text-gray-500]="planType !== 'INDIVIDUAL'"
+                [class.bg-white]="planType === 'INDIVIDUAL'" [class.shadow-sm]="planType === 'INDIVIDUAL'">
+                <i class="fa-solid fa-user mr-1.5 opacity-70"></i> Individual
+            </button>
+            <button type="button" (click)="togglePlanType('FAMILY')"
+                class="px-5 py-2.5 rounded-lg text-xs font-bold transition-all relative z-10 flex items-center"
+                [class.text-blue-700]="planType === 'FAMILY'" [class.text-gray-500]="planType !== 'FAMILY'"
+                [class.bg-white]="planType === 'FAMILY'" [class.shadow-sm]="planType === 'FAMILY'">
+                <i class="fa-solid fa-users mr-1.5 opacity-70"></i> Family
+                <span
+                    class="ml-1.5 bg-blue-100 text-blue-700 text-[0.55rem] px-1.5 py-0.5 rounded uppercase tracking-widest font-black leading-none mt-0.5">Discounts</span>
+            </button>
+        </div>
+        } @else {
+        <div class="px-5 py-2.5 rounded-xl bg-blue-50/50 border border-blue-100 flex items-center gap-2 relative z-10">
+            <i class="fa-solid text-blue-500"
+                [ngClass]="selectedPolicy.planType === 'FAMILY' ? 'fa-users' : 'fa-user'"></i>
+            <span class="text-xs font-bold text-blue-700 tracking-wide uppercase">{{ selectedPolicy.planType }}
+                PLAN</span>
+        </div>
+        }
+    </div>
+
+    <form class="flex flex-col" (ngSubmit)="onSubmit()" #applyForm="ngForm">
+
+        <div class="p-8">
+
+            <!-- Banners -->
+            @if (applySuccess()) {
+            <div class="flex items-center gap-3 px-5 py-4 rounded-xl text-sm font-medium animate-fade-in mb-8 shadow-sm"
+                style="background: #ecfdf5; border: 1px solid #a7f3d0; color: #059669;">
+                <i class="fa-solid fa-circle-check text-lg"></i>
+                Your application <strong>{{ applySuccess() }}</strong> has been submitted successfully!
+            </div>
+            }
+            @if (applyError()) {
+            <div class="flex items-center gap-3 px-5 py-4 rounded-xl text-sm font-medium animate-fade-in mb-8 shadow-sm"
+                style="background: #fef2f2; border: 1px solid #fecaca; color: #dc2626;">
+                <i class="fa-solid fa-circle-exclamation text-lg"></i>
+                {{ applyError() }}
+            </div>
+            }
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+
+                <!-- Left Column: Policy & Member Details -->
+                <div class="lg:col-span-8 flex flex-col gap-10">
+
+                    <!-- 1. Coverage Configuration -->
+                    <div class="flex flex-col gap-5">
+                        <div class="flex items-center gap-3 mb-2">
+                            <span
+                                class="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-xs shadow-sm border border-blue-100">1</span>
+                            <h3 class="text-base font-bold text-gray-800">Configure Coverage</h3>
+                        </div>
+
+                        <!-- Selected Policy Grid -->
+                        <div
+                            class="grid grid-cols-1 md:grid-cols-2 gap-5 p-1 bg-gray-50/50 rounded-2xl border border-gray-100">
+
+                            <div class="flex flex-col gap-1.5 group p-3">
+                                <label class="text-[0.65rem] font-bold text-gray-500 uppercase tracking-widest pl-1"
+                                    for="policyCode">
+                                    Select Policy <span class="text-red-400">*</span>
+                                </label>
+                                @if (policiesLoading) {
+                                <div
+                                    class="w-full px-4 py-3.5 rounded-xl bg-gray-100 animate-pulse text-sm text-gray-400 flex items-center gap-2 border border-gray-200">
+                                    <i class="fa-solid fa-spinner fa-spin"></i> Loading...
+                                </div>
+                                } @else {
+                                <div class="relative">
+                                    <select id="policyCode" name="policyCode" [(ngModel)]="form.policyCode"
+                                        (change)="onPolicyChange()" required
+                                        class="w-full pl-4 pr-10 py-3.5 rounded-xl text-sm font-semibold text-gray-900 outline-none transition-all shadow-sm cursor-pointer appearance-none bg-white border border-gray-200 group-hover:border-blue-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10">
+                                        <option value="" disabled>-- Select a policy --</option>
+                                        @for (p of policies; track p.id) {
+                                        <option [value]="p.policyCode">{{ p.policyName }} ({{ p.policyCode }})</option>
+                                        }
+                                    </select>
+                                    <i
+                                        class="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-[0.6rem] text-gray-400 pointer-events-none"></i>
+                                </div>
+                                }
+                            </div>
+
+                            <div class="flex flex-col gap-1.5 group p-3">
+                                <label class="text-[0.65rem] font-bold text-gray-500 uppercase tracking-widest pl-1"
+                                    for="requestedCoverage">
+                                    Coverage Amount (₹) <span class="text-red-400">*</span>
+                                </label>
+                                <input id="requestedCoverage" type="number" name="requestedCoverage"
+                                    [(ngModel)]="form.requestedCoverage" required
+                                    [min]="selectedPolicy?.minCoverage || 1"
+                                    [max]="selectedPolicy?.maxCoverage || 10000000" step="50000"
+                                    [disabled]="!selectedPolicy"
+                                    class="w-full px-4 py-3.5 rounded-xl text-sm font-semibold text-gray-900 outline-none transition-all shadow-sm bg-white border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed group-hover:border-blue-300" />
+                                @if (selectedPolicy) {
+                                <span class="text-[0.6rem] text-gray-500 font-medium pl-1 mt-0.5">Range: ₹{{
+                                    selectedPolicy.minCoverage | number }} - ₹{{ selectedPolicy.maxCoverage | number
+                                    }}</span>
+                                }
+                            </div>
+
+                            <div class="flex flex-col gap-1.5 group p-3 md:col-span-2">
+                                <label class="text-[0.65rem] font-bold text-gray-500 uppercase tracking-widest pl-1"
+                                    for="duration">
+                                    Policy Duration (Years) <span class="text-red-400">*</span>
+                                </label>
+                                <div class="flex gap-3">
+                                    <label class="flex-1 cursor-pointer">
+                                        <input type="radio" name="duration" [value]="1" [(ngModel)]="form.duration"
+                                            class="peer hidden">
+                                        <div
+                                            class="px-4 py-3 rounded-xl border-2 text-center text-sm font-bold transition-all peer-checked:border-blue-600 peer-checked:bg-blue-50 peer-checked:text-blue-700 border-gray-200 text-gray-500 hover:border-blue-200 bg-white shadow-sm">
+                                            1 Year
+                                        </div>
+                                    </label>
+                                    <label class="flex-1 cursor-pointer">
+                                        <input type="radio" name="duration" [value]="2" [(ngModel)]="form.duration"
+                                            class="peer hidden">
+                                        <div
+                                            class="px-4 py-3 rounded-xl border-2 text-center text-sm font-bold transition-all peer-checked:border-blue-600 peer-checked:bg-blue-50 peer-checked:text-blue-700 border-gray-200 text-gray-500 hover:border-blue-200 bg-white shadow-sm flex flex-col items-center justify-center">
+                                            2 Years
+                                        </div>
+                                    </label>
+                                    <label class="flex-1 cursor-pointer">
+                                        <input type="radio" name="duration" [value]="3" [(ngModel)]="form.duration"
+                                            class="peer hidden">
+                                        <div
+                                            class="px-4 py-3 rounded-xl border-2 text-center text-sm font-bold transition-all peer-checked:border-blue-600 peer-checked:bg-blue-50 peer-checked:text-blue-700 border-gray-200 text-gray-500 hover:border-blue-200 bg-white shadow-sm flex flex-col items-center justify-center">
+                                            3 Years
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full h-px bg-gray-100"></div>
+
+                    <!-- 2. Members Array -->
+                    <div class="flex flex-col gap-6">
+                        <div class="flex items-center gap-3">
+                            <span
+                                class="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-xs shadow-sm border border-blue-100">2</span>
+                            <h3 class="text-base font-bold text-gray-800">
+                                {{ planType === 'FAMILY' ? 'Family Members' : 'Primary Member Details' }}
+                            </h3>
+                        </div>
+
+                        <app-member-list [members]="members" [isFamily]="planType === 'FAMILY'">
+                        </app-member-list>
+                    </div>
+
+                </div>
+
+                <!-- Right Column: Premium Estimation Summary -->
+                <div class="lg:col-span-4">
+                    <div
+                        class="sticky top-24 bg-gray-50/50 rounded-3xl p-6 border border-gray-100 shadow-sm flex flex-col gap-5">
+                        <h3
+                            class="text-sm font-black text-gray-900 uppercase tracking-widest border-b border-gray-200 pb-3">
+                            Premium Summary</h3>
+
+                        <div class="flex flex-col gap-3.5">
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="text-gray-500 font-medium">Selected Policy</span>
+                                <span class="font-bold text-gray-800">{{ selectedPolicy?.policyName || 'None' }}</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="text-gray-500 font-medium">Coverage</span>
+                                <span class="font-bold text-gray-800">₹{{ form.requestedCoverage | number }}</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="text-gray-500 font-medium">Plan Type</span>
+                                <span class="font-bold text-gray-800">{{ planType }}</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="text-gray-500 font-medium">Duration</span>
+                                <span class="font-bold text-gray-800">{{ form.duration }} Year(s)</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="text-gray-500 font-medium">Members</span>
+                                <span class="font-bold text-gray-800">{{ members.length }}</span>
+                            </div>
+                        </div>
+
+                        <div class="w-full h-px bg-gray-200 my-2"></div>
+
+                        <div class="flex flex-col gap-1 p-4 rounded-xl relative overflow-hidden"
+                            style="background: linear-gradient(135deg, #1d4ed8, #2563eb); color: white;">
+                            <div
+                                class="absolute right-0 top-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/4 pointer-events-none">
+                            </div>
+                            <span
+                                class="text-[0.65rem] font-bold text-blue-100 uppercase tracking-widest border-b border-white/20 pb-2 mb-2">Estimated
+                                Total Premium</span>
+                            <div class="flex items-end gap-1 relative z-10">
+                                <span class="text-3xl font-black tracking-tight"
+                                    [class.opacity-50]="estimatedPremium === 0">₹{{ estimatedPremium | number:'1.0-0'
+                                    }}</span>
+                            </div>
+                            <p class="text-[0.6rem] text-blue-200 mt-2 font-medium leading-relaxed">
+                                *Estimation is for {{ form.duration }} year(s) total. Final premium is determined by
+                                underwriter assessment.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Submit actions -->
+        <div class="px-8 py-5 border-t border-gray-100 bg-gray-50 flex items-center justify-end">
+            <button type="submit" [disabled]="applyLoading || !selectedPolicy || applyForm.invalid"
+                class="pl-6 pr-2 py-2 rounded-2xl text-sm font-bold text-white transition-all flex items-center gap-4 relative overflow-hidden group/submit shadow-md hover:shadow-xl hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
+                style="background: linear-gradient(135deg, #1d4ed8, #2563eb);">
+                <span>Submit Application</span>
+                <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
+                    @if (applyLoading) {
+                    <span class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                    } @else {
+                    <i
+                        class="fa-solid fa-arrow-right text-xs transition-transform group-hover/submit:translate-x-1"></i>
+                    }
+                </div>
+            </button>
+        </div>
+
+    </form>
+</div>

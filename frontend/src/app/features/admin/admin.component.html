@@ -1,0 +1,1093 @@
+﻿<div class="flex h-screen font-sans overflow-hidden" style="background: #f0f7ff;">
+
+    <!-- â”€â”€ Sidebar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+    <aside class="w-60 flex-shrink-0 flex flex-col p-5 gap-1 relative overflow-hidden"
+        style="background: linear-gradient(160deg, #dbeafe 0%, #bfdbfe 45%, #93c5fd 100%); border-right: 1px solid rgba(255,255,255,0.5);">
+
+        <!-- Soft blobs -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <div class="absolute -top-16 -left-16 w-48 h-48 rounded-full"
+                style="background: radial-gradient(circle, rgba(219,234,254,0.6) 0%, transparent 70%);"></div>
+            <div class="absolute bottom-0 right-0 w-40 h-40 rounded-full"
+                style="background: radial-gradient(circle, rgba(191,219,254,0.5) 0%, transparent 70%);"></div>
+        </div>
+
+        <!-- Brand -->
+        <div class="relative z-10 flex items-center gap-3 pb-4 mb-2 border-b"
+            style="border-color: rgba(255,255,255,0.5);">
+            <div class="w-9 h-9 rounded-xl flex items-center justify-center shadow-lg flex-shrink-0"
+                style="background: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.9);">
+                <i class="fa-solid fa-shield-heart text-lg" style="color: #1d4ed8;"></i>
+            </div>
+            <div>
+                <span class="block text-sm font-bold tracking-tight" style="color: #0f172a;">SwasthaRaksha</span>
+                <span class="block text-[0.65rem] font-bold uppercase tracking-widest" style="color: #1d4ed8;">Admin
+                    Panel</span>
+            </div>
+        </div>
+
+        <!-- Nav -->
+        <nav class="relative z-10 flex flex-col gap-0.5 flex-1">
+            <button id="nav-policies"
+                class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 text-left w-full"
+                [style]="activeTab === 'policies'
+                    ? 'background: rgba(255,255,255,0.75); color: #1d4ed8; font-weight: 700; box-shadow: 0 2px 8px rgba(37,99,235,0.15);'
+                    : 'color: #1e3a5f;'" (click)="setTab('policies')">
+                <i class="fa-solid fa-file-shield text-xs flex-shrink-0"
+                    [style.color]="activeTab === 'policies' ? '#1d4ed8' : '#2563eb'"></i>
+                Policies
+                <span *ngIf="activeTab === 'policies'" class="ml-auto w-1.5 h-1.5 rounded-full"
+                    style="background: #1d4ed8;"></span>
+            </button>
+            <button id="nav-underwriters"
+                class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 text-left w-full"
+                [style]="activeTab === 'underwriters'
+                    ? 'background: rgba(255,255,255,0.75); color: #1d4ed8; font-weight: 700; box-shadow: 0 2px 8px rgba(37,99,235,0.15);'
+                    : 'color: #1e3a5f;'" (click)="setTab('underwriters')">
+                <i class="fa-solid fa-user-shield text-xs flex-shrink-0"
+                    [style.color]="activeTab === 'underwriters' ? '#1d4ed8' : '#2563eb'"></i>
+                Underwriters
+                <span *ngIf="activeTab === 'underwriters'" class="ml-auto w-1.5 h-1.5 rounded-full"
+                    style="background: #1d4ed8;"></span>
+            </button>
+            <button id="nav-claims-officers"
+                class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 text-left w-full"
+                [style]="activeTab === 'claims-officers'
+                    ? 'background: rgba(255,255,255,0.75); color: #1d4ed8; font-weight: 700; box-shadow: 0 2px 8px rgba(37,99,235,0.15);'
+                    : 'color: #1e3a5f;'" (click)="setTab('claims-officers')">
+                <i class="fa-solid fa-user-gear text-xs flex-shrink-0"
+                    [style.color]="activeTab === 'claims-officers' ? '#1d4ed8' : '#2563eb'"></i>
+                Claims Officers
+                <span *ngIf="activeTab === 'claims-officers'" class="ml-auto w-1.5 h-1.5 rounded-full"
+                    style="background: #1d4ed8;"></span>
+            </button>
+            <button id="nav-applications"
+                class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 text-left w-full"
+                [style]="activeTab === 'applications'
+                    ? 'background: rgba(255,255,255,0.75); color: #1d4ed8; font-weight: 700; box-shadow: 0 2px 8px rgba(37,99,235,0.15);'
+                    : 'color: #1e3a5f;'" (click)="setTab('applications')">
+                <i class="fa-solid fa-folder-open text-xs flex-shrink-0"
+                    [style.color]="activeTab === 'applications' ? '#1d4ed8' : '#2563eb'"></i>
+                Applications
+                <span *ngIf="activeTab === 'applications'" class="ml-auto w-1.5 h-1.5 rounded-full"
+                    style="background: #1d4ed8;"></span>
+            </button>
+            <button id="nav-claims"
+                class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 text-left w-full"
+                [style]="activeTab === 'claims'
+                    ? 'background: rgba(255,255,255,0.75); color: #1d4ed8; font-weight: 700; box-shadow: 0 2px 8px rgba(37,99,235,0.15);'
+                    : 'color: #1e3a5f;'" (click)="setTab('claims')">
+                <i class="fa-solid fa-file-invoice-dollar text-xs flex-shrink-0"
+                    [style.color]="activeTab === 'claims' ? '#1d4ed8' : '#2563eb'"></i>
+                Claims
+                <span *ngIf="activeTab === 'claims'" class="ml-auto w-1.5 h-1.5 rounded-full"
+                    style="background: #1d4ed8;"></span>
+            </button>
+            <button id="nav-issued-policies"
+                class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 text-left w-full"
+                [style]="activeTab === 'issued-policies'
+                    ? 'background: rgba(255,255,255,0.75); color: #1d4ed8; font-weight: 700; box-shadow: 0 2px 8px rgba(37,99,235,0.15);'
+                    : 'color: #1e3a5f;'" (click)="setTab('issued-policies')">
+                <i class="fa-solid fa-shield-halved text-xs flex-shrink-0"
+                    [style.color]="activeTab === 'issued-policies' ? '#1d4ed8' : '#2563eb'"></i>
+                Issued Policies
+                <span *ngIf="activeTab === 'issued-policies'" class="ml-auto w-1.5 h-1.5 rounded-full"
+                    style="background: #1d4ed8;"></span>
+            </button>
+        </nav>
+
+        <!-- Logout -->
+        <button id="logout-btn"
+            class="relative z-10 flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 w-full mt-1"
+            style="color: #dc2626; background: rgba(255,255,255,0.35);" (click)="logout()">
+            <i class="fa-solid fa-right-from-bracket text-xs"></i>
+            Logout
+        </button>
+    </aside>
+
+
+    <!-- â”€â”€ Main Content â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+    <main class="flex-1 overflow-y-auto px-10 py-8">
+
+        <!-- â•â•â•â• POLICIES TAB â•â•â•â• -->
+        @if (activeTab === 'policies') {
+        <div class="flex items-start justify-between mb-7 gap-4">
+            <div>
+                <h1 class="text-2xl font-extrabold text-gray-900 tracking-tight mb-0.5">Insurance Policies</h1>
+                <p class="text-sm text-gray-400">Manage all health insurance policies</p>
+            </div>
+            <button id="add-policy-btn"
+                class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold text-white shadow-lg transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl"
+                style="background: linear-gradient(135deg,#1d4ed8,#2563eb); box-shadow: 0 4px 14px rgba(37,99,235,0.3);"
+                (click)="openAddPolicy()">
+                <i class="fa-solid fa-plus text-xs"></i>
+                Add Policy
+            </button>
+        </div>
+
+        @if (policySuccess) {
+        <div class="flex items-center gap-2.5 px-4 py-3 rounded-xl text-sm font-medium mb-5 shadow-sm"
+            style="background: #ecfdf5; border: 1px solid #a7f3d0; color: #059669;">
+            <i class="fa-solid fa-circle-check text-base"></i>{{ policySuccess }}
+        </div>
+        }
+        @if (policyError) {
+        <div class="flex items-center gap-2.5 px-4 py-3 rounded-xl text-sm font-medium mb-5 shadow-sm"
+            style="background: #fef2f2; border: 1px solid #fecaca; color: #dc2626;">
+            <i class="fa-solid fa-circle-exclamation text-base"></i>{{ policyError }}
+        </div>
+        }
+
+        <!-- Modal -->
+        @if (showPolicyForm) {
+        <div class="fixed inset-0 flex items-center justify-center z-50"
+            style="background: rgba(15,23,42,0.45); backdrop-filter: blur(6px);" (click)="cancelPolicyForm()">
+            <div class="bg-white rounded-2xl w-[580px] max-w-[95vw] shadow-2xl overflow-hidden animate-slide-up"
+                style="border: 1px solid #dbeafe;" (click)="$event.stopPropagation()">
+                <div class="flex items-center justify-between px-6 py-5 border-b"
+                    style="background: #eff6ff80; border-color: #dbeafe;">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-xl flex items-center justify-center shadow-sm"
+                            style="background: linear-gradient(135deg, #1d4ed8, #2563eb);">
+                            <i class="fa-solid fa-file-shield text-white text-sm"></i>
+                        </div>
+                        <h2 class="text-lg font-bold text-gray-900">{{ editingPolicy ? 'Edit Policy' : 'Add New Policy'
+                            }}</h2>
+                    </div>
+                    <button
+                        class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:bg-gray-100 hover:text-gray-700 transition-all duration-150"
+                        (click)="cancelPolicyForm()">
+                        <i class="fa-solid fa-xmark text-sm"></i>
+                    </button>
+                </div>
+                <form class="px-6 py-5 flex flex-col gap-4" (ngSubmit)="savePolicy()" #pf="ngForm">
+                    @if (policyError) {
+                    <div class="flex items-center gap-2.5 px-4 py-3 rounded-xl text-sm font-medium"
+                        style="background: #fef2f2; border: 1px solid #fecaca; color: #dc2626;">
+                        <i class="fa-solid fa-circle-exclamation text-base"></i>{{ policyError }}
+                    </div>
+                    }
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="flex flex-col gap-1.5 group">
+                            <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider"
+                                for="policyName">Policy Name</label>
+                            <input id="policyName" type="text"
+                                class="w-full px-3.5 py-2.5 rounded-xl text-sm text-gray-900 outline-none transition-all border group-hover:border-blue-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 shadow-sm"
+                                style="background: #f9fafb; border: 1.5px solid #e5e7eb;"
+                                [(ngModel)]="policyForm.policyName" name="policyName"
+                                placeholder="e.g. Gold Health Plan" required />
+                        </div>
+                        <div class="flex flex-col gap-1.5 group">
+                            <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider"
+                                for="policyCode">Policy Code</label>
+                            <input id="policyCode" type="text"
+                                class="w-full px-3.5 py-2.5 rounded-xl text-sm text-gray-900 outline-none transition-all border group-hover:border-blue-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 shadow-sm"
+                                style="background: #f9fafb; border: 1.5px solid #e5e7eb;"
+                                [(ngModel)]="policyForm.policyCode" name="policyCode" placeholder="e.g. GHP-001"
+                                required />
+                        </div>
+                        <div class="flex flex-col gap-1.5 group">
+                            <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider"
+                                for="minCoverage">Min Coverage (â‚¹)</label>
+                            <input id="minCoverage" type="number"
+                                class="w-full px-3.5 py-2.5 rounded-xl text-sm text-gray-900 outline-none transition-all border group-hover:border-blue-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 shadow-sm"
+                                style="background: #f9fafb; border: 1.5px solid #e5e7eb;"
+                                [(ngModel)]="policyForm.minCoverage" name="minCoverage" min="0" required />
+                        </div>
+                        <div class="flex flex-col gap-1.5 group">
+                            <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider"
+                                for="maxCoverage">Max Coverage (â‚¹)</label>
+                            <input id="maxCoverage" type="number"
+                                class="w-full px-3.5 py-2.5 rounded-xl text-sm text-gray-900 outline-none transition-all border group-hover:border-blue-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 shadow-sm"
+                                style="background: #f9fafb; border: 1.5px solid #e5e7eb;"
+                                [(ngModel)]="policyForm.maxCoverage" name="maxCoverage" min="0" required />
+                        </div>
+                        <div class="flex flex-col gap-1.5 group">
+                            <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider"
+                                for="basePercent">Base Premium (%)</label>
+                            <input id="basePercent" type="number"
+                                class="w-full px-3.5 py-2.5 rounded-xl text-sm text-gray-900 outline-none transition-all border group-hover:border-blue-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 shadow-sm"
+                                style="background: #f9fafb; border: 1.5px solid #e5e7eb;"
+                                [(ngModel)]="policyForm.basePercent" name="basePercent" min="0" max="100" step="0.01"
+                                required />
+                        </div>
+                        <div class="flex flex-col gap-1.5 group">
+                            <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider"
+                                for="planType">Plan Type</label>
+                            <select id="planType"
+                                class="w-full px-3.5 py-2.5 rounded-xl text-sm text-gray-900 outline-none transition-all border group-hover:border-blue-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 shadow-sm"
+                                style="background: #f9fafb; border: 1.5px solid #e5e7eb;"
+                                [(ngModel)]="policyForm.planType" name="planType" required>
+                                <option value="INDIVIDUAL">Individual Only</option>
+                                <option value="FAMILY">Family Only</option>
+                                <option value="BOTH">Both (Individual & Family)</option>
+                            </select>
+                        </div>
+                        <div class="flex flex-col gap-1.5 justify-end">
+                            <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</label>
+                            <label class="flex items-center gap-2.5 cursor-pointer text-sm font-semibold text-gray-700">
+                                <input id="policyActive" type="checkbox" class="hidden" [(ngModel)]="policyForm.active"
+                                    name="active" />
+                                <span
+                                    class="w-11 h-6 rounded-full relative transition-all duration-300 flex items-center p-0.5 shadow-sm"
+                                    [style]="policyForm.active ? 'background: #1d4ed8;' : 'background: #d1d5db;'">
+                                    <span class="w-5 h-5 rounded-full bg-white shadow-md transition-all duration-300"
+                                        [style]="policyForm.active ? 'transform:translateX(20px);' : 'transform:translateX(0);'"></span>
+                                </span>
+                                <span [style.color]="policyForm.active ? '#1d4ed8' : '#9ca3af'">
+                                    {{ policyForm.active ? 'Active' : 'Inactive' }}
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="flex justify-end gap-2.5 pt-2 border-t border-gray-100 mt-1">
+                        <button type="button"
+                            class="px-5 py-2.5 rounded-xl text-sm font-semibold text-gray-500 bg-white border border-gray-200 hover:bg-gray-50 transition-all duration-150 shadow-sm"
+                            (click)="cancelPolicyForm()">Cancel</button>
+                        <button id="save-policy-btn" type="submit"
+                            class="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+                            style="background: linear-gradient(135deg,#1d4ed8,#2563eb); box-shadow: 0 4px 12px rgba(37,99,235,0.3);"
+                            [disabled]="policyLoading || pf.invalid">
+                            @if (policyLoading) { <span
+                                class="inline-block w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                            }
+                            <i *ngIf="!policyLoading" class="fa-solid fa-floppy-disk text-xs"></i>
+                            {{ editingPolicy ? 'Update Policy' : 'Save Policy' }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        }
+
+        @if (policyLoading && policies().length === 0) {
+        <div
+            class="flex flex-col items-center justify-center gap-4 p-16 bg-white rounded-2xl border border-gray-100 shadow-sm text-gray-400">
+            <span
+                class="inline-block w-8 h-8 border-[3px] border-blue-200 border-t-blue-600 rounded-full animate-spin"></span>
+            <p class="text-sm">Loading policies...</p>
+        </div>
+        } @else if (policies().length === 0) {
+        <div
+            class="flex flex-col items-center justify-center gap-4 p-16 bg-white rounded-2xl border border-gray-100 shadow-sm text-gray-400">
+            <i class="fa-solid fa-file-circle-xmark text-5xl opacity-25"></i>
+            <p class="text-sm font-medium">No policies found. Add your first policy!</p>
+        </div>
+        } @else {
+        <div class="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
+            <table class="w-full border-collapse text-sm">
+                <thead>
+                    <tr style="background: #eff6ff; border-bottom: 1.5px solid #dbeafe;">
+                        <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">#
+                        </th>
+                        <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">
+                            Policy Name</th>
+                        <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">
+                            Code</th>
+                        <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">
+                            Min Coverage</th>
+                        <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">
+                            Max Coverage</th>
+                        <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">
+                            Base %</th>
+                        <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">
+                            Plan Type</th>
+                        <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">
+                            Status</th>
+                        <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">
+                            Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (policy of policies(); track policy.id; let i = $index) {
+                    <tr class="border-b border-gray-50 hover:bg-blue-50/30 transition-colors duration-150">
+                        <td class="px-4 py-3.5 text-gray-400 tabular-nums text-xs font-medium">{{ i + 1 }}</td>
+                        <td class="px-4 py-3.5 font-semibold text-gray-800">{{ policy.policyName }}</td>
+                        <td class="px-4 py-3.5">
+                            <span class="px-2.5 py-1 rounded-lg text-xs font-bold font-mono shadow-sm"
+                                style="background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe;">{{
+                                policy.policyCode }}</span>
+                        </td>
+                        <td class="px-4 py-3.5 text-gray-600 font-medium">₹{{ policy.minCoverage | number }}</td>
+                        <!--add rupees symbol-->
+
+                        <td class="px-4 py-3.5 text-gray-600 font-medium">₹{{ policy.maxCoverage | number }}</td>
+                        <td class="px-4 py-3.5 font-semibold" style="color: #1d4ed8;">{{ policy.basePercent }}%</td>
+                        <td class="px-4 py-3.5">
+                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[0.65rem] font-bold"
+                                [style]="policy.planType === 'BOTH' ? 'background:#f0fdf4; color:#166534;' : (policy.planType === 'FAMILY' ? 'background:#f5f3ff; color:#5b21b6;' : 'background:#eff6ff; color:#1e40af;')">
+                                {{ policy.planType === 'BOTH' ? 'INDIVIDUAL & FAMILY' : policy.planType }}
+                            </span>
+                        </td>
+                        <td class="px-4 py-3.5">
+                            <span
+                                class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold shadow-sm"
+                                [style]="policy.active ? 'background:#ecfdf5; color:#059669; border:1px solid #a7f3d0;' : 'background:#fef2f2; color:#dc2626; border:1px solid #fecaca;'">
+                                <span class="w-1.5 h-1.5 rounded-full bg-current"></span>
+                                {{ policy.active ? 'Active' : 'Inactive' }}
+                            </span>
+                        </td>
+                        <td class="px-4 py-3.5">
+                            <div class="flex items-center gap-1.5">
+                                <button [id]="'edit-policy-' + policy.id" title="Edit"
+                                    class="w-7 h-7 rounded-lg flex items-center justify-center text-gray-400 hover:text-blue-600 border border-gray-200 hover:border-blue-200 hover:bg-blue-50 transition-all duration-150"
+                                    (click)="openEditPolicy(policy)">
+                                    <i class="fa-solid fa-pen-to-square text-xs"></i>
+                                </button>
+                                <button [id]="'delete-policy-' + policy.id" title="Delete"
+                                    class="w-7 h-7 rounded-lg flex items-center justify-center text-gray-400 hover:text-red-600 border border-gray-200 hover:border-red-200 hover:bg-red-50 transition-all duration-150"
+                                    (click)="deletePolicy(policy.id!)">
+                                    <i class="fa-solid fa-trash-can text-xs"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="px-4 py-3 text-xs text-gray-400 border-t border-gray-50 font-medium"
+                style="background: #eff6ff50;">
+                {{ policies().length }} polic{{ policies().length === 1 ? 'y' : 'ies' }} total
+            </div>
+        </div>
+        }
+        }
+
+        <!-- ════ UNDERWRITERS TAB ════ -->
+        @if (activeTab === 'underwriters') {
+        <div class="mb-7">
+            <h1 class="text-2xl font-extrabold text-gray-900 tracking-tight mb-0.5">Underwriters</h1>
+            <p class="text-sm text-gray-400">Register new underwriter accounts</p>
+        </div>
+
+        @if (underwriterSuccess) {
+        <div class="flex items-center gap-2.5 px-4 py-3 rounded-xl text-sm font-medium mb-5 shadow-sm"
+            style="background: #ecfdf5; border: 1px solid #a7f3d0; color: #059669;">
+            <i class="fa-solid fa-circle-check text-base"></i>{{ underwriterSuccess }}
+        </div>
+        }
+        @if (underwriterError) {
+        <div class="flex items-center gap-2.5 px-4 py-3 rounded-xl text-sm font-medium mb-5 shadow-sm"
+            style="background: #fef2f2; border: 1px solid #fecaca; color: #dc2626;">
+            <i class="fa-solid fa-circle-exclamation text-base"></i>{{ underwriterError }}
+        </div>
+        }
+
+        <div class="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm mb-5">
+            <div class="flex items-center gap-4 px-6 py-5 border-b"
+                style="background: #eff6ff80; border-color: #dbeafe;">
+                <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm"
+                    style="background: linear-gradient(135deg, #1d4ed8, #2563eb);">
+                    <i class="fa-solid fa-user-shield text-white text-lg"></i>
+                </div>
+                <div>
+                    <h2 class="text-base font-bold text-gray-900 mb-0.5">Add New Underwriter</h2>
+                    <p class="text-xs text-gray-400">Create a new underwriter account with review privileges</p>
+                </div>
+            </div>
+            <form class="px-6 py-5 flex flex-col gap-4" (ngSubmit)="addUnderwriter()" #uf="ngForm">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="flex flex-col gap-1.5 group">
+                        <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider"
+                            for="uwUsername">Full Name</label>
+                        <input id="uwUsername" type="text"
+                            class="w-full px-3.5 py-2.5 rounded-xl text-sm text-gray-900 outline-none transition-all border group-hover:border-blue-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 shadow-sm"
+                            style="background: #f9fafb; border: 1.5px solid #e5e7eb;"
+                            [(ngModel)]="underwriterForm.username" name="username" placeholder="e.g. John Smith"
+                            required />
+                    </div>
+                    <div class="flex flex-col gap-1.5 group">
+                        <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider" for="uwEmail">Email
+                            Address</label>
+                        <input id="uwEmail" type="email"
+                            class="w-full px-3.5 py-2.5 rounded-xl text-sm text-gray-900 outline-none transition-all border group-hover:border-blue-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 shadow-sm"
+                            style="background: #f9fafb; border: 1.5px solid #e5e7eb;"
+                            [(ngModel)]="underwriterForm.email" name="email" placeholder="john&#64;company.com"
+                            required />
+                    </div>
+                    <div class="flex flex-col gap-1.5 group">
+                        <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider"
+                            for="uwPassword">Temporary Password</label>
+                        <input id="uwPassword" type="password"
+                            class="w-full px-3.5 py-2.5 rounded-xl text-sm text-gray-900 outline-none transition-all border group-hover:border-blue-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 shadow-sm"
+                            style="background: #f9fafb; border: 1.5px solid #e5e7eb;"
+                            [(ngModel)]="underwriterForm.password" name="password" placeholder="Set a secure password"
+                            required minlength="6" />
+                    </div>
+                    <div class="flex flex-col gap-1.5 justify-end">
+                        <label
+                            class="text-xs font-semibold text-gray-500 uppercase tracking-wider invisible">Action</label>
+                        <button id="add-underwriter-btn" type="submit"
+                            class="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-sm font-bold text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+                            style="background: linear-gradient(135deg,#1d4ed8,#2563eb); box-shadow: 0 4px 12px rgba(37,99,235,0.3);"
+                            [disabled]="underwriterLoading || uf.invalid">
+                            @if (underwriterLoading) {
+                            <span
+                                class="inline-block w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                            }
+                            <i *ngIf="!underwriterLoading" class="fa-solid fa-user-plus text-xs"></i>
+                            Create Underwriter
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Info Card -->
+        <div class="flex gap-4 rounded-2xl px-6 py-5 shadow-sm" style="background: #eff6ff; border: 1px solid #bfdbfe;">
+            <div style="color: #1d4ed8;" class="flex-shrink-0 mt-0.5">
+                <i class="fa-solid fa-circle-info text-lg"></i>
+            </div>
+            <div>
+                <strong class="block text-sm font-bold text-gray-800 mb-1">About the Underwriter Role</strong>
+                <p class="text-xs text-gray-500 leading-relaxed">Underwriters can review insurance applications and
+                    make approval decisions. Once assigned, they have access to specific applications assigned to
+                    them by the admin.</p>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm mt-8">
+            <table class="w-full border-collapse text-sm">
+                <thead>
+                    <tr style="background: #eff6ff; border-bottom: 1.5px solid #dbeafe;">
+                        <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">#
+                        </th>
+                        <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Name
+                        </th>
+                        <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Email
+                        </th>
+                        <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">
+                            Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (uw of underwriters(); track uw.id; let i = $index) {
+                    <tr class="border-b border-gray-50 hover:bg-blue-50/30 transition-colors">
+                        <td class="px-4 py-3.5 text-gray-400 text-xs font-medium">{{ i + 1 }}</td>
+                        <td class="px-4 py-3.5 font-semibold text-gray-800">{{ uw.username }}</td>
+                        <td class="px-4 py-3.5 text-gray-600 font-medium">{{ uw.email }}</td>
+                        <td class="px-4 py-3.5">
+                            <button
+                                class="text-red-500 hover:text-red-700 hover:bg-red-50 p-2 rounded-lg transition-all"
+                                (click)="deleteUnderwriter(uw.id!)">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        }
+
+        <!-- ════ CLAIMS OFFICERS TAB ════ -->
+        @if (activeTab === 'claims-officers') {
+        <div class="mb-7">
+            <h1 class="text-2xl font-extrabold text-gray-900 tracking-tight mb-0.5">Claims Officers</h1>
+            <p class="text-sm text-gray-400">Register and manage claims officer accounts</p>
+        </div>
+
+        @if (claimsOfficerSuccess()) {
+        <div class="flex items-center gap-2.5 px-4 py-3 rounded-xl text-sm font-medium mb-5 shadow-sm"
+            style="background: #ecfdf5; border: 1px solid #a7f3d0; color: #059669;">
+            <i class="fa-solid fa-circle-check text-base"></i>{{ claimsOfficerSuccess() }}
+        </div>
+        }
+        @if (claimsOfficerError) {
+        <div class="flex items-center gap-2.5 px-4 py-3 rounded-xl text-sm font-medium mb-5 shadow-sm"
+            style="background: #fef2f2; border: 1px solid #fecaca; color: #dc2626;">
+            <i class="fa-solid fa-circle-exclamation text-base"></i>{{ claimsOfficerError }}
+        </div>
+        }
+
+        <div class="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm mb-5">
+            <div class="flex items-center gap-4 px-6 py-5 border-b"
+                style="background: #eff6ff80; border-color: #dbeafe;">
+                <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm"
+                    style="background: linear-gradient(135deg, #1d4ed8, #2563eb);">
+                    <i class="fa-solid fa-user-gear text-white text-lg"></i>
+                </div>
+                <div>
+                    <h2 class="text-base font-bold text-gray-900 mb-0.5">Add New Claims Officer</h2>
+                    <p class="text-xs text-gray-400">Create account for processing claims</p>
+                </div>
+            </div>
+            <form class="px-6 py-5 flex flex-col gap-4" (ngSubmit)="addClaimsOfficer()" #cof="ngForm">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="flex flex-col gap-1.5 group">
+                        <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider"
+                            for="coUsername">Full Name</label>
+                        <input id="coUsername" type="text"
+                            class="w-full px-3.5 py-2.5 rounded-xl text-sm text-gray-900 outline-none transition-all border group-hover:border-blue-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 shadow-sm"
+                            style="background: #f9fafb; border: 1.5px solid #e5e7eb;"
+                            [(ngModel)]="claimsOfficerForm.username" name="username" placeholder="e.g. Alice Wong"
+                            required />
+                    </div>
+                    <div class="flex flex-col gap-1.5 group">
+                        <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider" for="coEmail">Email
+                            Address</label>
+                        <input id="coEmail" type="email"
+                            class="w-full px-3.5 py-2.5 rounded-xl text-sm text-gray-900 outline-none transition-all border group-hover:border-blue-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 shadow-sm"
+                            style="background: #f9fafb; border: 1.5px solid #e5e7eb;"
+                            [(ngModel)]="claimsOfficerForm.email" name="email" placeholder="alice&#64;company.com"
+                            required />
+                    </div>
+                    <div class="flex flex-col gap-1.5 group">
+                        <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider"
+                            for="coPassword">Temporary Password</label>
+                        <input id="coPassword" type="password"
+                            class="w-full px-3.5 py-2.5 rounded-xl text-sm text-gray-900 outline-none transition-all border group-hover:border-blue-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 shadow-sm"
+                            style="background: #f9fafb; border: 1.5px solid #e5e7eb;"
+                            [(ngModel)]="claimsOfficerForm.password" name="password" placeholder="Set a secure password"
+                            required minlength="6" />
+                    </div>
+                    <div class="flex flex-col gap-1.5 justify-end">
+                        <label
+                            class="text-xs font-semibold text-gray-500 uppercase tracking-wider invisible">Action</label>
+                        <button id="add-officer-btn" type="submit"
+                            class="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-sm font-bold text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+                            style="background: linear-gradient(135deg,#1d4ed8,#2563eb); box-shadow: 0 4px 12px rgba(37,99,235,0.3);"
+                            [disabled]="claimsOfficerLoading || cof.invalid">
+                            @if (claimsOfficerLoading) {
+                            <span
+                                class="inline-block w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                            }
+                            <i *ngIf="!claimsOfficerLoading" class="fa-solid fa-user-plus text-xs"></i>
+                            Create Claims Officer
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
+            <table class="w-full border-collapse text-sm">
+                <thead>
+                    <tr style="background: #eff6ff; border-bottom: 1.5px solid #dbeafe;">
+                        <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">#
+                        </th>
+                        <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Name
+                        </th>
+                        <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Email
+                        </th>
+                        <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">
+                            Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (co of claimsOfficers(); track co.id; let i = $index) {
+                    <tr class="border-b border-gray-50 hover:bg-blue-50/30 transition-colors">
+                        <td class="px-4 py-3.5 text-gray-400 text-xs font-medium">{{ i + 1 }}</td>
+                        <td class="px-4 py-3.5 font-semibold text-gray-800">{{ co.username }}</td>
+                        <td class="px-4 py-3.5 text-gray-600 font-medium">{{ co.email }}</td>
+                        <td class="px-4 py-3.5">
+                            <button
+                                class="text-red-500 hover:text-red-700 hover:bg-red-50 p-2 rounded-lg transition-all"
+                                (click)="deleteClaimsOfficer(co.id!)">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        }
+
+        <!-- ════ APPLICATIONS TAB ════ -->
+        @if (activeTab === 'applications') {
+
+        <!-- Assign Underwriter Modal -->
+        @if (showAssignModal) {
+        <div class="fixed inset-0 flex items-center justify-center z-50"
+            style="background: rgba(15,23,42,0.5); backdrop-filter: blur(6px);" (click)="closeAssignModal()">
+            <div class="bg-white rounded-2xl w-[480px] max-w-[95vw] shadow-2xl overflow-hidden animate-slide-up"
+                style="border:1px solid #dbeafe;" (click)="$event.stopPropagation()">
+                <div class="flex items-center justify-between px-6 py-5 border-b"
+                    style="background:#eff6ff80; border-color:#dbeafe;">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-xl flex items-center justify-center shadow-sm"
+                            style="background: linear-gradient(135deg, #1d4ed8, #2563eb);">
+                            <i class="fa-solid fa-user-check text-white text-sm"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-base font-bold text-gray-900">Assign to Underwriter</h2>
+                            <p class="text-xs text-gray-400">{{ assigningApp?.applicationNumber }}</p>
+                        </div>
+                    </div>
+                    <button class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:bg-gray-100"
+                        (click)="closeAssignModal()">
+                        <i class="fa-solid fa-xmark text-sm"></i>
+                    </button>
+                </div>
+                <div class="px-6 py-5">
+                    <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 block">Select
+                        Underwriter</label>
+                    <select id="assign-underwriter-select"
+                        class="w-full px-3.5 py-2.5 rounded-xl text-sm text-gray-900 outline-none transition-all shadow-sm"
+                        style="background: #f9fafb; border: 1.5px solid #e5e7eb;" [(ngModel)]="selectedUnderwriterEmail"
+                        name="assignUnderwriter">
+                        <option value="">-- Select an underwriter --</option>
+                        @for (uw of underwriters(); track uw.id) {
+                        <option [value]="uw.email">{{ uw.username }} ({{ uw.email }})</option>
+                        }
+                    </select>
+                    <div class="flex justify-end gap-2.5 mt-5">
+                        <button type="button"
+                            class="px-5 py-2.5 rounded-xl text-sm font-semibold text-gray-500 bg-white border border-gray-200 hover:bg-gray-50 transition-all"
+                            (click)="closeAssignModal()">Cancel</button>
+                        <button id="confirm-assign-btn" type="button"
+                            class="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold text-white shadow-md transition-all hover:-translate-y-0.5 disabled:opacity-50"
+                            style="background: linear-gradient(135deg,#1d4ed8,#2563eb);"
+                            [disabled]="!selectedUnderwriterEmail" (click)="confirmAssign()">
+                            <i class="fa-solid fa-check text-xs"></i>
+                            Confirm Assignment
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        }
+
+        <div class="flex items-start justify-between mb-6 gap-4">
+            <div class="flex items-center gap-4">
+                <div>
+                    <h1 class="text-2xl font-extrabold text-gray-900 tracking-tight mb-0.5">Applications</h1>
+                    <p class="text-sm text-gray-400">All insurance applications — assign to underwriters for review</p>
+                </div>
+                <button (click)="loadApplications(true)"
+                    class="p-2 rounded-xl text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition-all border border-transparent hover:border-blue-100"
+                    title="Refresh Applications" [disabled]="appLoading">
+                    <i class="fa-solid fa-arrows-rotate" [class.animate-spin]="appLoading"></i>
+                </button>
+            </div>
+            <select id="app-status-filter"
+                class="px-3.5 py-2 rounded-xl text-sm font-medium outline-none transition-all shadow-sm"
+                style="background: #fff; border: 1.5px solid #e5e7eb; color: #374151;" [(ngModel)]="appStatusFilter"
+                name="appStatusFilter">
+                <option value="ALL">All Statuses</option>
+                <option value="DRAFT">Draft</option>
+                <option value="SUBMITTED">Submitted</option>
+                <option value="UNDER_REVIEW">Under Review</option>
+                <option value="WAITING_CUSTOMER_ACCEPTANCE">Waiting Acceptance</option>
+                <option value="CUSTOMER_ACCEPTED">Customer Accepted</option>
+                <option value="CUSTOMER_DECLINED">Customer Declined</option>
+                <option value="APPROVED">Approved</option>
+                <option value="REJECTED">Rejected</option>
+                <option value="POLICY_ISSUED">Policy Issued</option>
+            </select>
+        </div>
+
+        @if (appSuccess) {
+        <div class="flex items-center gap-2.5 px-4 py-3 rounded-xl text-sm font-medium mb-5 shadow-sm"
+            style="background:#ecfdf5; border:1px solid #a7f3d0; color:#059669;">
+            <i class="fa-solid fa-circle-check"></i>{{ appSuccess }}
+        </div>
+        }
+        @if (appError) {
+        <div class="flex items-center gap-2.5 px-4 py-3 rounded-xl text-sm font-medium mb-5 shadow-sm"
+            style="background:#fef2f2; border:1px solid #fecaca; color:#dc2626;">
+            <i class="fa-solid fa-circle-exclamation"></i>{{ appError }}
+        </div>
+        }
+
+        @if (appLoading) {
+        <div class="flex items-center justify-center gap-3 p-16 bg-white rounded-2xl border border-gray-100 shadow-sm">
+            <span
+                class="inline-block w-7 h-7 border-[3px] border-blue-200 border-t-blue-600 rounded-full animate-spin"></span>
+            <p class="text-sm text-gray-400">Loading applications...</p>
+        </div>
+        } @else if (filteredApplications.length === 0) {
+        <div
+            class="flex flex-col items-center justify-center gap-4 p-16 bg-white rounded-2xl border border-gray-100 shadow-sm text-gray-400">
+            <i class="fa-solid fa-folder-open text-5xl opacity-20"></i>
+            <p class="text-sm font-medium">No applications found.</p>
+        </div>
+        } @else {
+        <div class="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
+            <div class="overflow-x-auto">
+                <table class="w-full border-collapse text-sm">
+                    <thead>
+                        <tr style="background:#eff6ff; border-bottom:1.5px solid #dbeafe;">
+                            <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">
+                                App #</th>
+                            <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">
+                                Applicant</th>
+                            <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">
+                                Policy</th>
+                            <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">
+                                Coverage</th>
+                            <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">
+                                Status</th>
+                            <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">
+                                Assigned To</th>
+                            <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">
+                                Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (app of filteredApplications; track app.id) {
+                        <tr class="border-b border-gray-50 hover:bg-blue-50/30 transition-colors">
+                            <td class="px-4 py-3.5">
+                                <span class="font-mono text-xs font-bold px-2 py-1 rounded-lg"
+                                    style="background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">{{
+                                    app.applicationNumber }}</span>
+                            </td>
+                            <td class="px-4 py-3.5">
+                                <div class="font-semibold text-gray-800 text-xs">{{ app.user.username }}</div>
+                                <div class="text-gray-400 text-xs">{{ app.user.email }}</div>
+                            </td>
+                            <td class="px-4 py-3.5 text-gray-600 text-xs font-medium">{{ app.policy.policyName }}</td>
+                            <td class="px-4 py-3.5 text-gray-700 font-semibold text-xs">₹{{ app.requestedCoverage |
+                                number }}</td>
+                            <td class="px-4 py-3.5">
+                                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold"
+                                    [style]="getStatusColor(app.status)">
+                                    {{ app.status | titlecase }}
+                                </span>
+                            </td>
+                            <td class="px-4 py-3.5">
+                                @if (app.assignedTo) {
+                                <div class="flex items-center gap-1.5">
+                                    <div class="w-6 h-6 rounded-full flex items-center justify-center text-white text-[9px] font-bold flex-shrink-0"
+                                        style="background: linear-gradient(135deg,#1d4ed8,#3b82f6);">
+                                        {{ app.assignedTo.username.charAt(0).toUpperCase() }}
+                                    </div>
+                                    <span class="text-xs text-gray-600 font-medium">{{ app.assignedTo.username }}</span>
+                                </div>
+                                } @else {
+                                <span class="text-xs text-gray-400 italic">Unassigned</span>
+                                }
+                            </td>
+                            <td class="px-4 py-3.5">
+                                @if (app.status === 'SUBMITTED' || app.status === 'UNDER_REVIEW') {
+                                <button [id]="'assign-btn-' + app.id"
+                                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all hover:-translate-y-0.5 shadow-sm"
+                                    [style]="app.assignedTo
+                                        ? 'background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;'
+                                        : 'background:linear-gradient(135deg,#1d4ed8,#2563eb); color:white;'"
+                                    (click)="openAssignModal(app)">
+                                    <i class="fa-solid fa-user-pen text-[10px]"></i>
+                                    {{ app.assignedTo ? 'Reassign' : 'Assign' }}
+                                </button>
+                                } @else {
+                                <span class="text-[10px] text-gray-400 font-medium italic">Decision Fixed</span>
+                                }
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="px-4 py-3 text-xs text-gray-400 border-t border-gray-50 font-medium"
+                style="background:#eff6ff50;">
+                {{ filteredApplications.length }} application{{ filteredApplications.length === 1 ? '' : 's' }}
+            </div>
+        </div>
+        }
+        }
+
+        <!-- ════ CLAIMS TAB ════ -->
+        @if (activeTab === 'claims') {
+
+        <!-- Assign Claims Officer Modal -->
+        @if (showClaimAssignModal) {
+        <div class="fixed inset-0 flex items-center justify-center z-50"
+            style="background: rgba(15,23,42,0.5); backdrop-filter: blur(6px);" (click)="closeClaimAssignModal()">
+            <div class="bg-white rounded-2xl w-[480px] max-w-[95vw] shadow-2xl overflow-hidden animate-slide-up"
+                style="border:1px solid #dbeafe;" (click)="$event.stopPropagation()">
+                <div class="flex items-center justify-between px-6 py-5 border-b"
+                    style="background:#eff6ff80; border-color:#dbeafe;">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-xl flex items-center justify-center shadow-sm"
+                            style="background: linear-gradient(135deg, #1d4ed8, #2563eb);">
+                            <i class="fa-solid fa-user-check text-white text-sm"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-base font-bold text-gray-900">Assign to Claims Officer</h2>
+                            <p class="text-xs text-gray-400">{{ assigningClaim?.claimNumber }}</p>
+                        </div>
+                    </div>
+                    <button class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:bg-gray-100"
+                        (click)="closeClaimAssignModal()">
+                        <i class="fa-solid fa-xmark text-sm"></i>
+                    </button>
+                </div>
+                <div class="px-6 py-5">
+                    <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 block">Select
+                        Claims Officer</label>
+                    <select id="assign-officer-select"
+                        class="w-full px-3.5 py-2.5 rounded-xl text-sm text-gray-900 outline-none transition-all shadow-sm"
+                        style="background: #f9fafb; border: 1.5px solid #e5e7eb;" [(ngModel)]="selectedOfficerEmail"
+                        name="assignOfficer">
+                        <option value="">-- Select an officer --</option>
+                        @for (co of claimsOfficers(); track co.id) {
+                        <option [value]="co.email">{{ co.username }} ({{ co.email }})</option>
+                        }
+                    </select>
+                    <div class="flex justify-end gap-2.5 mt-5">
+                        <button type="button"
+                            class="px-5 py-2.5 rounded-xl text-sm font-semibold text-gray-500 bg-white border border-gray-200 hover:bg-gray-50 transition-all"
+                            (click)="closeClaimAssignModal()">Cancel</button>
+                        <button id="confirm-claim-assign-btn" type="button"
+                            class="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold text-white shadow-md transition-all hover:-translate-y-0.5 disabled:opacity-50"
+                            style="background: linear-gradient(135deg,#1d4ed8,#2563eb);"
+                            [disabled]="!selectedOfficerEmail" (click)="confirmClaimAssign()">
+                            <i class="fa-solid fa-check text-xs"></i>
+                            Confirm Assignment
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        }
+
+        <div class="flex items-start justify-between mb-6 gap-4">
+            <div class="flex items-center gap-4">
+                <div>
+                    <h1 class="text-2xl font-extrabold text-gray-900 tracking-tight mb-0.5">Insurance Claims</h1>
+                    <p class="text-sm text-gray-400">All submitted claims — assign to claims officers for verification
+                    </p>
+                </div>
+                <button (click)="loadClaims()"
+                    class="p-2 rounded-xl text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition-all border border-transparent hover:border-blue-100"
+                    title="Refresh Claims" [disabled]="claimLoading">
+                    <i class="fa-solid fa-arrows-rotate" [class.animate-spin]="claimLoading"></i>
+                </button>
+            </div>
+            <select id="claim-status-filter"
+                class="px-3.5 py-2 rounded-xl text-sm font-medium outline-none transition-all shadow-sm"
+                style="background: #fff; border: 1.5px solid #e5e7eb; color: #374151;" [(ngModel)]="claimStatusFilter"
+                name="claimStatusFilter">
+                <option value="ALL">All Statuses</option>
+                <option value="PENDING">Pending</option>
+                <option value="APPROVED">Approved</option>
+                <option value="REJECTED">Rejected</option>
+            </select>
+        </div>
+
+        @if (claimSuccess) {
+        <div class="flex items-center gap-2.5 px-4 py-3 rounded-xl text-sm font-medium mb-5 shadow-sm"
+            style="background:#ecfdf5; border:1px solid #a7f3d0; color:#059669;">
+            <i class="fa-solid fa-circle-check"></i>{{ claimSuccess }}
+        </div>
+        }
+        @if (claimError) {
+        <div class="flex items-center gap-2.5 px-4 py-3 rounded-xl text-sm font-medium mb-5 shadow-sm"
+            style="background:#fef2f2; border:1px solid #fecaca; color:#dc2626;">
+            <i class="fa-solid fa-circle-exclamation"></i>{{ claimError }}
+        </div>
+        }
+
+        @if (claimLoading) {
+        <div class="flex items-center justify-center gap-3 p-16 bg-white rounded-2xl border border-gray-100 shadow-sm">
+            <span
+                class="inline-block w-7 h-7 border-[3px] border-blue-200 border-t-blue-600 rounded-full animate-spin"></span>
+            <p class="text-sm text-gray-400">Loading claims...</p>
+        </div>
+        } @else if (filteredClaims.length === 0) {
+        <div
+            class="flex flex-col items-center justify-center gap-4 p-16 bg-white rounded-2xl border border-gray-100 shadow-sm text-gray-400">
+            <i class="fa-solid fa-file-invoice-dollar text-5xl opacity-20"></i>
+            <p class="text-sm font-medium">No claims found.</p>
+        </div>
+        } @else {
+        <div class="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
+            <div class="overflow-x-auto">
+                <table class="w-full border-collapse text-sm">
+                    <thead>
+                        <tr style="background:#eff6ff; border-bottom:1.5px solid #dbeafe;">
+                            <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">
+                                Claim #</th>
+                            <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">
+                                Policyholder</th>
+                            <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">
+                                Amount</th>
+                            <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">
+                                Hospital</th>
+                            <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">
+                                Status</th>
+                            <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">
+                                Assigned To</th>
+                            <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">
+                                Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (claim of filteredClaims; track claim.id) {
+                        <tr class="border-b border-gray-50 hover:bg-blue-50/30 transition-colors">
+                            <td class="px-4 py-3.5">
+                                <span class="font-mono text-xs font-bold px-2 py-1 rounded-lg"
+                                    style="background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">{{
+                                    claim.claimNumber }}</span>
+                                <div class="text-[10px] text-gray-400 mt-1">{{ claim.policyNumber }}</div>
+                            </td>
+                            <td class="px-4 py-3.5">
+                                <div class="font-semibold text-gray-800 text-xs">{{ claim.claimant.username }}</div>
+                                <div class="text-gray-400 text-xs">{{ claim.claimant.email }}</div>
+                            </td>
+                            <td class="px-4 py-3.5 text-gray-700 font-semibold text-xs">₹{{ claim.claimAmount |
+                                number }}</td>
+                            <td class="px-4 py-3.5 text-gray-600 text-xs font-medium">{{ claim.hospitalName }}</td>
+                            <td class="px-4 py-3.5">
+                                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold"
+                                    [style]="getStatusColor(claim.status)">
+                                    {{ claim.status | titlecase }}
+                                </span>
+                            </td>
+                            <td class="px-4 py-3.5">
+                                @if (claim.reviewedBy) {
+                                <div class="flex items-center gap-1.5">
+                                    <div class="w-6 h-6 rounded-full flex items-center justify-center text-white text-[9px] font-bold flex-shrink-0"
+                                        style="background: linear-gradient(135deg,#1d4ed8,#3b82f6);">
+                                        {{ claim.reviewedBy.username.charAt(0).toUpperCase() }}
+                                    </div>
+                                    <span class="text-xs text-gray-600 font-medium">{{ claim.reviewedBy.username
+                                        }}</span>
+                                </div>
+                                } @else {
+                                <span class="text-xs text-gray-400 italic">Unassigned</span>
+                                }
+                            </td>
+                            <td class="px-4 py-3.5">
+                                @if (claim.status === 'PENDING') {
+                                <button [id]="'assign-claim-btn-' + claim.id"
+                                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all hover:-translate-y-0.5 shadow-sm"
+                                    [style]="claim.reviewedBy
+                                        ? 'background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;'
+                                        : 'background:linear-gradient(135deg,#1d4ed8,#2563eb); color:white;'"
+                                    (click)="openClaimAssignModal(claim)">
+                                    <i class="fa-solid fa-user-pen text-[10px]"></i>
+                                    {{ claim.reviewedBy ? 'Reassign' : 'Assign' }}
+                                </button>
+                                } @else {
+                                <span class="text-[10px] text-gray-400 font-medium italic">Verified</span>
+                                }
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="px-4 py-3 text-xs text-gray-400 border-t border-gray-50 font-medium"
+                style="background:#eff6ff50;">
+                {{ filteredClaims.length }} claim{{ filteredClaims.length === 1 ? '' : 's' }}
+            </div>
+        </div>
+        }
+        }
+
+        <!-- â•â•â•â• ISSUED POLICIES TAB â•â•â•â• -->
+        @if (activeTab === 'issued-policies') {
+        <div class="mb-6 flex items-center gap-4">
+            <div>
+                <h1 class="text-2xl font-extrabold text-gray-900 tracking-tight mb-0.5">Issued Policies</h1>
+                <p class="text-sm text-gray-400">All policies issued to customers with their current status</p>
+            </div>
+            <button (click)="loadIssuedPolicies(true)"
+                class="p-2 rounded-xl text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition-all border border-transparent hover:border-blue-100"
+                title="Refresh Policies" [disabled]="issuedLoading">
+                <i class="fa-solid fa-arrows-rotate" [class.animate-spin]="issuedLoading"></i>
+            </button>
+        </div>
+
+        @if (issuedError) {
+        <div class="flex items-center gap-2.5 px-4 py-3 rounded-xl text-sm font-medium mb-5 shadow-sm"
+            style="background:#fef2f2; border:1px solid #fecaca; color:#dc2626;">
+            <i class="fa-solid fa-circle-exclamation"></i>{{ issuedError }}
+        </div>
+        }
+
+        @if (issuedLoading) {
+        <div class="flex items-center justify-center gap-3 p-16 bg-white rounded-2xl border border-gray-100 shadow-sm">
+            <span
+                class="inline-block w-7 h-7 border-[3px] border-blue-200 border-t-blue-600 rounded-full animate-spin"></span>
+            <p class="text-sm text-gray-400">Loading policies...</p>
+        </div>
+        } @else if (issuedPolicies().length === 0) {
+        <div
+            class="flex flex-col items-center justify-center gap-4 p-16 bg-white rounded-2xl border border-gray-100 shadow-sm text-gray-400">
+            <i class="fa-solid fa-shield-halved text-5xl opacity-20"></i>
+            <p class="text-sm font-medium">No issued policies yet.</p>
+        </div>
+        } @else {
+        <div class="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
+            <div class="overflow-x-auto">
+                <table class="w-full border-collapse text-sm">
+                    <thead>
+                        <tr style="background:#eff6ff; border-bottom:1.5px solid #dbeafe;">
+                            <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">
+                                Policy #</th>
+                            <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">
+                                Policyholder</th>
+                            <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">
+                                Plan</th>
+                            <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">
+                                Coverage</th>
+                            <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">
+                                Premium/yr</th>
+                            <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">
+                                Paid / Total</th>
+                            <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">
+                                Duration</th>
+                            <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">
+                                Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (ip of issuedPolicies(); track ip.id) {
+                        <tr class="border-b border-gray-50 hover:bg-blue-50/30 transition-colors">
+                            <td class="px-4 py-3.5">
+                                <span class="font-mono text-xs font-bold px-2 py-1 rounded-lg"
+                                    style="background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">{{
+                                    ip.policyNumber }}</span>
+                            </td>
+                            <td class="px-4 py-3.5">
+                                <div class="font-semibold text-gray-800 text-xs">{{ ip.user.username }}</div>
+                                <div class="text-gray-400 text-xs">{{ ip.user.email }}</div>
+                            </td>
+                            <td class="px-4 py-3.5 text-gray-600 text-xs font-medium">
+                                {{ ip.application.policy.policyName }}
+                            </td>
+                            <td class="px-4 py-3.5 font-semibold text-gray-700 text-xs">₹{{ ip.coverageAmount | number
+                                }}</td>
+                            <td class="px-4 py-3.5 font-semibold text-xs" style="color:#1d4ed8;">₹{{ ip.premiumAmount
+                                |
+                                number }}</td>
+                            <td class="px-4 py-3.5 text-xs">
+                                <div class="flex items-center gap-1.5">
+                                    <span class="font-bold" style="color:#059669;">{{ ip.paidInstallments }}</span>
+                                    <span class="text-gray-400">/</span>
+                                    <span class="text-gray-500">{{ ip.totalInstallments }}</span>
+                                    <span class="text-gray-400 text-[10px]">installments</span>
+                                </div>
+                                <div class="w-24 h-1.5 rounded-full mt-1" style="background:#e5e7eb;">
+                                    <div class="h-1.5 rounded-full"
+                                        style="background:linear-gradient(90deg,#1d4ed8,#3b82f6);"
+                                        [style.width]="(ip.totalInstallments > 0 ? (ip.paidInstallments / ip.totalInstallments * 100) : 0) + '%'">
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-4 py-3.5 text-xs text-gray-600">{{ ip.durationYears }} yr{{ ip.durationYears
+                                === 1 ? '' : 's' }}</td>
+                            <td class="px-4 py-3.5">
+                                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold"
+                                    [style]="getPolicyStatusColor(ip.status)">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-current"></span>
+                                    {{ ip.status }}
+                                </span>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="px-4 py-3 text-xs text-gray-400 border-t border-gray-50 font-medium"
+                style="background:#eff6ff50;">
+                {{ issuedPolicies().length }} issued polic{{ issuedPolicies().length === 1 ? 'y' : 'ies' }} total
+            </div>
+        </div>
+        }
+        }
+    </main>
+</div>
