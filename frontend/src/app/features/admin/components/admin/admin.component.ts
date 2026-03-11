@@ -183,6 +183,18 @@ export class AdminComponent implements OnInit {
         });
     }
 
+    togglePolicyStatus(policy: Policy): void {
+        const action = policy.active ? 'deactivate' : 'activate';
+        if (!confirm(`Are you sure you want to ${action} this policy?`)) return;
+        this.adminService.togglePolicyStatus(policy.id!).subscribe({
+            next: (updated) => {
+                this.policySuccess = `Policy "${updated.policyName}" is now ${updated.active ? 'Active' : 'Inactive'}.`;
+                this.loadPolicies();
+            },
+            error: () => { this.policyError = 'Failed to update policy status.'; }
+        });
+    }
+
     // ── Underwriter Methods ───────────────────────────────────────
     loadUnderwriters(): void {
         this.underwriterLoading = true;

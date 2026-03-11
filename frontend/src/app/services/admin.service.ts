@@ -99,7 +99,7 @@ export class AdminService {
 
     // ── Policies ──────────────────────────────────────────────────
     getAllPolicies(): Observable<Policy[]> {
-        return this.http.get<Policy[]>(`${this.apiUrl}/policies`);
+        return this.http.get<Policy[]>(`${this.apiUrl}/policies?adminView=true`);
     }
 
     addPolicy(policy: Policy): Observable<Policy> {
@@ -112,6 +112,10 @@ export class AdminService {
 
     deletePolicy(id: number): Observable<void> {
         return this.http.delete<void>(`${this.apiUrl}/policies/${id}`);
+    }
+
+    togglePolicyStatus(id: number): Observable<Policy> {
+        return this.http.patch<Policy>(`${this.apiUrl}/policies/${id}/toggle-status`, null);
     }
 
     // ── Underwriters ──────────────────────────────────────────────

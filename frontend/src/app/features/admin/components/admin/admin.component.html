@@ -188,7 +188,7 @@
                         </div>
                         <div class="flex flex-col gap-1.5 group">
                             <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider"
-                                for="minCoverage">Min Coverage (â‚¹)</label>
+                                for="minCoverage">Min Coverage (₹)</label>
                             <input id="minCoverage" type="number"
                                 class="w-full px-3.5 py-2.5 rounded-xl text-sm text-gray-900 outline-none transition-all border group-hover:border-blue-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 shadow-sm"
                                 style="background: #f9fafb; border: 1.5px solid #e5e7eb;"
@@ -196,7 +196,7 @@
                         </div>
                         <div class="flex flex-col gap-1.5 group">
                             <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider"
-                                for="maxCoverage">Max Coverage (â‚¹)</label>
+                                for="maxCoverage">Max Coverage (₹)</label>
                             <input id="maxCoverage" type="number"
                                 class="w-full px-3.5 py-2.5 rounded-xl text-sm text-gray-900 outline-none transition-all border group-hover:border-blue-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 shadow-sm"
                                 style="background: #f9fafb; border: 1.5px solid #e5e7eb;"
@@ -334,10 +334,12 @@
                                     (click)="openEditPolicy(policy)">
                                     <i class="fa-solid fa-pen-to-square text-xs"></i>
                                 </button>
-                                <button [id]="'delete-policy-' + policy.id" title="Delete"
-                                    class="w-7 h-7 rounded-lg flex items-center justify-center text-gray-400 hover:text-red-600 border border-gray-200 hover:border-red-200 hover:bg-red-50 transition-all duration-150"
-                                    (click)="deletePolicy(policy.id!)">
-                                    <i class="fa-solid fa-trash-can text-xs"></i>
+                                <button [id]="'toggle-policy-' + policy.id"
+                                    [title]="policy.active ? 'Deactivate' : 'Activate'"
+                                    class="w-7 h-7 rounded-lg flex items-center justify-center border transition-all duration-150"
+                                    [style]="policy.active ? 'color:#dc2626; border-color:#fecaca; background:#fff5f5;' : 'color:#059669; border-color:#a7f3d0; background:#f0fdf4;'"
+                                    (click)="togglePolicyStatus(policy)">
+                                    <i [class]="'fa-solid text-xs ' + (policy.active ? 'fa-ban' : 'fa-circle-check')"></i>
                                 </button>
                             </div>
                         </td>
