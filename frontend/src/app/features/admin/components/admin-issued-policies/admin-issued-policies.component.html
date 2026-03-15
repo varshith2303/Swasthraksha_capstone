@@ -1,0 +1,92 @@
+<div class="mb-6 flex items-center gap-4">
+    <div>
+        <h1 class="text-2xl font-extrabold text-gray-900 tracking-tight mb-0.5">Issued Policies</h1>
+        <p class="text-sm text-gray-400">All policies issued to customers with their current status</p>
+    </div>
+    <button (click)="load(true)"
+        class="p-2 rounded-xl text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition-all border border-transparent hover:border-blue-100"
+        title="Refresh Policies" [disabled]="loading">
+        <i class="fa-solid fa-arrows-rotate" [class.animate-spin]="loading"></i>
+    </button>
+</div>
+
+@if (error) {
+<div class="flex items-center gap-2.5 px-4 py-3 rounded-xl text-sm font-medium mb-5 shadow-sm"
+    style="background:#fef2f2; border:1px solid #fecaca; color:#dc2626;">
+    <i class="fa-solid fa-circle-exclamation"></i>{{ error }}
+</div>
+}
+
+@if (loading) {
+<div class="flex items-center justify-center gap-3 p-16 bg-white rounded-2xl border border-gray-100 shadow-sm">
+    <span class="inline-block w-7 h-7 border-[3px] border-blue-200 border-t-blue-600 rounded-full animate-spin"></span>
+    <p class="text-sm text-gray-400">Loading policies...</p>
+</div>
+} @else if (issuedPolicies().length === 0) {
+<div class="flex flex-col items-center justify-center gap-4 p-16 bg-white rounded-2xl border border-gray-100 shadow-sm text-gray-400">
+    <i class="fa-solid fa-shield-halved text-5xl opacity-20"></i>
+    <p class="text-sm font-medium">No issued policies yet.</p>
+</div>
+} @else {
+<div class="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
+    <div class="overflow-x-auto">
+        <table class="w-full border-collapse text-sm">
+            <thead>
+                <tr style="background:#eff6ff; border-bottom:1.5px solid #dbeafe;">
+                    <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Policy #</th>
+                    <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Policyholder</th>
+                    <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Plan</th>
+                    <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Coverage</th>
+                    <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Premium/yr</th>
+                    <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Paid / Total</th>
+                    <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Duration</th>
+                    <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (ip of issuedPolicies(); track ip.id) {
+                <tr class="border-b border-gray-50 hover:bg-blue-50/30 transition-colors">
+                    <td class="px-4 py-3.5">
+                        <span class="font-mono text-xs font-bold px-2 py-1 rounded-lg"
+                            style="background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">{{
+                            ip.policyNumber }}</span>
+                    </td>
+                    <td class="px-4 py-3.5">
+                        <div class="font-semibold text-gray-800 text-xs">{{ ip.user.username }}</div>
+                        <div class="text-gray-400 text-xs">{{ ip.user.email }}</div>
+                    </td>
+                    <td class="px-4 py-3.5 text-gray-600 text-xs font-medium">{{ ip.application.policy.policyName }}</td>
+                    <td class="px-4 py-3.5 font-semibold text-gray-700 text-xs">₹{{ ip.coverageAmount | number }}</td>
+                    <td class="px-4 py-3.5 font-semibold text-xs" style="color:#1d4ed8;">₹{{ ip.premiumAmount | number }}</td>
+                    <td class="px-4 py-3.5 text-xs">
+                        <div class="flex items-center gap-1.5">
+                            <span class="font-bold" style="color:#059669;">{{ ip.paidInstallments }}</span>
+                            <span class="text-gray-400">/</span>
+                            <span class="text-gray-500">{{ ip.totalInstallments }}</span>
+                            <span class="text-gray-400 text-[10px]">installments</span>
+                        </div>
+                        <div class="w-24 h-1.5 rounded-full mt-1" style="background:#e5e7eb;">
+                            <div class="h-1.5 rounded-full"
+                                style="background:linear-gradient(90deg,#1d4ed8,#3b82f6);"
+                                [style.width]="(ip.totalInstallments > 0 ? (ip.paidInstallments / ip.totalInstallments * 100) : 0) + '%'">
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-4 py-3.5 text-xs text-gray-600">{{ ip.durationYears }} yr{{ ip.durationYears === 1 ? '' : 's' }}</td>
+                    <td class="px-4 py-3.5">
+                        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold"
+                            [style]="getPolicyStatusColor(ip.status)">
+                            <span class="w-1.5 h-1.5 rounded-full bg-current"></span>
+                            {{ ip.status }}
+                        </span>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="px-4 py-3 text-xs text-gray-400 border-t border-gray-50 font-medium" style="background:#eff6ff50;">
+        {{ issuedPolicies().length }} issued polic{{ issuedPolicies().length === 1 ? 'y' : 'ies' }} total
+    </div>
+</div>
+}

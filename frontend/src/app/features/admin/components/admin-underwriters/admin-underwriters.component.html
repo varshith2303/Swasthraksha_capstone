@@ -1,0 +1,115 @@
+<div class="mb-7">
+    <h1 class="text-2xl font-extrabold text-gray-900 tracking-tight mb-0.5">Underwriters</h1>
+    <p class="text-sm text-gray-400">Register new underwriter accounts</p>
+</div>
+
+@if (success) {
+<div class="flex items-center gap-2.5 px-4 py-3 rounded-xl text-sm font-medium mb-5 shadow-sm"
+    style="background: #ecfdf5; border: 1px solid #a7f3d0; color: #059669;">
+    <i class="fa-solid fa-circle-check text-base"></i>{{ success }}
+</div>
+}
+@if (error) {
+<div class="flex items-center gap-2.5 px-4 py-3 rounded-xl text-sm font-medium mb-5 shadow-sm"
+    style="background: #fef2f2; border: 1px solid #fecaca; color: #dc2626;">
+    <i class="fa-solid fa-circle-exclamation text-base"></i>{{ error }}
+</div>
+}
+
+<div class="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm mb-5">
+    <div class="flex items-center gap-4 px-6 py-5 border-b" style="background: #eff6ff80; border-color: #dbeafe;">
+        <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm"
+            style="background: linear-gradient(135deg, #1d4ed8, #2563eb);">
+            <i class="fa-solid fa-user-shield text-white text-lg"></i>
+        </div>
+        <div>
+            <h2 class="text-base font-bold text-gray-900 mb-0.5">Add New Underwriter</h2>
+            <p class="text-xs text-gray-400">Create a new underwriter account with review privileges</p>
+        </div>
+    </div>
+    <form class="px-6 py-5 flex flex-col gap-4" (ngSubmit)="add()" #uf="ngForm">
+        <div class="grid grid-cols-2 gap-4">
+            <div class="flex flex-col gap-1.5 group">
+                <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider"
+                    for="uwUsername">Full Name</label>
+                <input id="uwUsername" type="text"
+                    class="w-full px-3.5 py-2.5 rounded-xl text-sm text-gray-900 outline-none transition-all border group-hover:border-blue-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 shadow-sm"
+                    style="background: #f9fafb; border: 1.5px solid #e5e7eb;"
+                    [(ngModel)]="form.username" name="username" placeholder="e.g. John Smith" required />
+            </div>
+            <div class="flex flex-col gap-1.5 group">
+                <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider"
+                    for="uwEmail">Email Address</label>
+                <input id="uwEmail" type="email"
+                    class="w-full px-3.5 py-2.5 rounded-xl text-sm text-gray-900 outline-none transition-all border group-hover:border-blue-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 shadow-sm"
+                    style="background: #f9fafb; border: 1.5px solid #e5e7eb;"
+                    [(ngModel)]="form.email" name="email" placeholder="john&#64;company.com" required />
+            </div>
+            <div class="flex flex-col gap-1.5 group">
+                <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider"
+                    for="uwPassword">Temporary Password</label>
+                <input id="uwPassword" type="password"
+                    class="w-full px-3.5 py-2.5 rounded-xl text-sm text-gray-900 outline-none transition-all border group-hover:border-blue-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 shadow-sm"
+                    style="background: #f9fafb; border: 1.5px solid #e5e7eb;"
+                    [(ngModel)]="form.password" name="password" placeholder="Set a secure password"
+                    required minlength="6" />
+            </div>
+            <div class="flex flex-col gap-1.5 justify-end">
+                <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider invisible">Action</label>
+                <button id="add-underwriter-btn" type="submit"
+                    class="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-sm font-bold text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+                    style="background: linear-gradient(135deg,#1d4ed8,#2563eb); box-shadow: 0 4px 12px rgba(37,99,235,0.3);"
+                    [disabled]="loading || uf.invalid">
+                    @if (loading) {
+                    <span class="inline-block w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                    }
+                    @if (!loading) {
+                    <i class="fa-solid fa-user-plus text-xs"></i>
+                    }
+                    Create Underwriter
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Info Card -->
+<div class="flex gap-4 rounded-2xl px-6 py-5 shadow-sm" style="background: #eff6ff; border: 1px solid #bfdbfe;">
+    <div style="color: #1d4ed8;" class="flex-shrink-0 mt-0.5">
+        <i class="fa-solid fa-circle-info text-lg"></i>
+    </div>
+    <div>
+        <strong class="block text-sm font-bold text-gray-800 mb-1">About the Underwriter Role</strong>
+        <p class="text-xs text-gray-500 leading-relaxed">Underwriters can review insurance applications and
+            make approval decisions. Once assigned, they have access to specific applications assigned to
+            them by the admin.</p>
+    </div>
+</div>
+
+<div class="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm mt-8">
+    <table class="w-full border-collapse text-sm">
+        <thead>
+            <tr style="background: #eff6ff; border-bottom: 1.5px solid #dbeafe;">
+                <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">#</th>
+                <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Name</th>
+                <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Email</th>
+                <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (uw of underwriters(); track uw.id; let i = $index) {
+            <tr class="border-b border-gray-50 hover:bg-blue-50/30 transition-colors">
+                <td class="px-4 py-3.5 text-gray-400 text-xs font-medium">{{ i + 1 }}</td>
+                <td class="px-4 py-3.5 font-semibold text-gray-800">{{ uw.username }}</td>
+                <td class="px-4 py-3.5 text-gray-600 font-medium">{{ uw.email }}</td>
+                <td class="px-4 py-3.5">
+                    <button class="text-red-500 hover:text-red-700 hover:bg-red-50 p-2 rounded-lg transition-all"
+                        (click)="delete(uw.id!)">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>

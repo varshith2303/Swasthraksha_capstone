@@ -66,11 +66,10 @@ public class AuthService implements UserDetailsService {
 
         String role = user.getRole();
 
-        // If deleting an underwriter, check for assigned applications
+        
         if ("UNDERWRITER".equals(role)) {
             List<Application> assigned = applicationRepo.findByAssignedToEmail(user.getEmail());
             if (!assigned.isEmpty()) {
-                // Null out the assignments so the delete can proceed
                 for (Application app : assigned) {
                     app.setAssignedTo(null);
                 }
@@ -78,7 +77,7 @@ public class AuthService implements UserDetailsService {
             }
         }
 
-        // If deleting a claims officer, check for assigned claims
+       
         if ("CLAIMS_OFFICER".equals(role)) {
             List<Claim> assignedClaims = claimRepo.findByReviewedBy(user);
             if (!assignedClaims.isEmpty()) {

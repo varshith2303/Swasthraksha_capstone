@@ -1,7 +1,9 @@
 import { Component, Input, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { PolicyAssignment, ClaimRequest, ClaimResponse, UserService } from '../../../../services/user.service';
+import { forkJoin, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+import { PolicyAssignment, ClaimRequest, ClaimResponse, DocumentType, UserService } from '../../../../services/user.service';
 
 @Component({
     selector: 'app-my-claims',
@@ -13,10 +15,17 @@ export class MyClaimsComponent implements OnInit {
     @Input() activePolicies: PolicyAssignment[] = [];
 
     claims = signal<ClaimResponse[]>([]);
-    loadingClaims = false;
-    submitting = false;
-    submitSuccess = '';
-    submitError = '';
+    loadingClaims = signal(false);
+    submitting = signal(false);
+    submitSuccess = signal('');
+    submitError = signal('');
+    documentUploadSuccess = signal('');
+    documentUploadError = signal('');
+
+    readonly allowedFileTypes = ['application/pdf', 'image/jpeg', 'image/png'];
+    readonly maxFileSize = 10 * 1024 * 1024;
+
+    selectedDocuments: Partial<Record<DocumentType, File>> = {};
 
     form: ClaimRequest = {
         policyNumber: '',
@@ -35,29 +44,86 @@ export class MyClaimsComponent implements OnInit {
     }
 
     loadClaims(): void {
-        this.loadingClaims = true;
+        this.loadingClaims.set(true);
         this.userService.getMyClaims().subscribe({
-            next: (data) => { this.claims.set(data); this.loadingClaims = false; },
-            error: () => { this.loadingClaims = false; }
+            next: (data) => { this.claims.set(data); this.loadingClaims.set(false); },
+            error: () => { this.loadingClaims.set(false); }
         });
     }
 
     onSubmitClaim(): void {
-        this.submitSuccess = '';
-        this.submitError = '';
-        this.submitting = true;
+        this.submitSuccess.set('');
+        this.submitError.set('');
+        this.documentUploadSuccess.set('');
+        this.documentUploadError.set('');
+        this.submitting.set(true);
         this.userService.submitClaim(this.form).subscribe({
             next: (res) => {
-                this.submitting = false;
-                this.submitSuccess = res.claimNumber;
-                this.resetForm();
-                this.loadClaims();
+                const uploads = this.buildClaimUploadRequests(res.claimNumber);
+                if (uploads.length === 0) {
+                    this.submitting.set(false);
+                    this.submitSuccess.set(res.claimNumber);
+                    this.resetForm();
+                    this.loadClaims();
+                    return;
+                }
+
+                forkJoin(uploads).subscribe({
+                    next: (results) => {
+                        const successCount = results.filter(r => r.ok).length;
+                        const failed = results.filter(r => !r.ok);
+
+                        if (successCount > 0) {
+                            this.documentUploadSuccess.set(`${successCount} document(s) uploaded successfully.`);
+                        }
+                        if (failed.length > 0) {
+                            this.documentUploadError.set(failed[0].message || 'Some documents failed to upload.');
+                        }
+
+                        this.submitting.set(false);
+                        this.submitSuccess.set(res.claimNumber);
+                        this.resetForm();
+                        this.loadClaims();
+                    },
+                    error: () => {
+                        this.submitting.set(false);
+                        this.submitSuccess.set(res.claimNumber);
+                        this.documentUploadError.set('Claim submitted, but document upload failed.');
+                        this.resetForm();
+                        this.loadClaims();
+                    }
+                });
             },
             error: (err) => {
-                this.submitting = false;
-                this.submitError = err.error?.message || 'Failed to submit claim. Please try again.';
+                this.submitting.set(false);
+                this.submitError.set(err.error?.message || 'Failed to submit claim. Please try again.');
             }
         });
+    }
+
+    onFileSelected(event: Event, documentType: DocumentType): void {
+        const input = event.target as HTMLInputElement;
+        const file = input.files?.[0];
+
+        if (!file) {
+            this.selectedDocuments[documentType] = undefined;
+            return;
+        }
+
+        const validationMessage = this.validateFile(file);
+        if (validationMessage) {
+            this.documentUploadError.set(validationMessage);
+            this.selectedDocuments[documentType] = undefined;
+            input.value = '';
+            return;
+        }
+
+        this.documentUploadError.set('');
+        this.selectedDocuments[documentType] = file;
+    }
+
+    getSelectedFileName(documentType: DocumentType): string {
+        return this.selectedDocuments[documentType]?.name || 'No file selected';
     }
 
     get selectedPolicy(): PolicyAssignment | null {
@@ -69,9 +135,10 @@ export class MyClaimsComponent implements OnInit {
     }
 
     latestClaimDate(policyNumber: string): string {
+        console.log(this.claims());
         const dates = this.claims()
-            .filter(c => c.policyNumber === policyNumber && c.submittedDate)
-            .map(c => c.submittedDate!);
+            .filter(c => c.policyNumber === policyNumber && c.status === 'APPROVED' && c.reviewedDate)
+            .map(c => c.reviewedDate!);
         if (dates.length === 0) return 'No claims yet';
         const latest = dates.sort().at(-1)!;
         return new Date(latest).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
@@ -87,6 +154,32 @@ export class MyClaimsComponent implements OnInit {
             dischargeDate: '',
             memberId: undefined
         };
+        this.selectedDocuments = {};
+    }
+
+    private validateFile(file: File): string | null {
+        if (!this.allowedFileTypes.includes(file.type)) {
+            return 'Only PDF, JPG, and PNG files are allowed.';
+        }
+        if (file.size > this.maxFileSize) {
+            return 'File size must be 10MB or less.';
+        }
+        return null;
+    }
+
+    private buildClaimUploadRequests(claimNumber: string) {
+        return (Object.entries(this.selectedDocuments) as [DocumentType, File | undefined][])
+            .filter(([, file]) => !!file)
+            .map(([documentType, file]) => this.userService
+                .uploadClaimDocument(claimNumber, documentType, file!)
+                .pipe(
+                    map(() => ({ ok: true, message: '' })),
+                    catchError((err) => of({
+                        ok: false,
+                        message: err.error?.message || `Failed to upload ${documentType}`
+                    }))
+                )
+            );
     }
 
     getClaimStatusStyle(status: string): string {

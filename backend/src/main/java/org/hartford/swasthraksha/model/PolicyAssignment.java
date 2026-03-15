@@ -51,6 +51,17 @@ public class PolicyAssignment {
     private LocalDate lastRenewalDate;
     private Double noClaimBonusPercentage;
 
+    public LocalDate getLatestClaimDate() {
+        return latestClaimDate;
+    }
+
+    public void setLatestClaimDate(LocalDate latestClaimDate) {
+        this.latestClaimDate = latestClaimDate;
+    }
+
+    private LocalDate latestClaimDate;
+
+
     // Policy lifecycle
     @Enumerated(EnumType.STRING)
     private PolicyStatus status;

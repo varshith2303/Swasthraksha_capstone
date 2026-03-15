@@ -37,7 +37,12 @@ public class ApplicationController {
         return ResponseEntity.ok(applicationService.getApplicationsByEmail(auth.getName()));
     }
 
-    /** Applicant: decline an offer for a given application */
+    @PreAuthorize("hasRole('APPLICANT')")
+    @PatchMapping("/{applicationNumber}/accept")
+    public ResponseEntity<Application> acceptApplication(@PathVariable String applicationNumber, Authentication auth) {
+        return ResponseEntity.ok(applicationService.acceptApplication(applicationNumber, auth.getName()));
+    }
+
     @PreAuthorize("hasRole('APPLICANT')")
     @PatchMapping("/{id}/decline")
     public ResponseEntity<Application> declineApplication(@PathVariable Long id, Authentication auth) {
@@ -53,7 +58,7 @@ public class ApplicationController {
         return ResponseEntity.ok(applicationService.getPendingApplications(auth.getName()));
     }
 
-    /** Underwriter: get applications assigned to them */
+   
     @PreAuthorize("hasRole('UNDERWRITER')")
     @GetMapping("/assigned")
     public ResponseEntity<List<Application>> getAssignedApplications(Authentication auth) {
@@ -70,16 +75,14 @@ public class ApplicationController {
                 request.getFinalPremium(), auth.getName()));
     }
 
-    // ── Admin endpoints ────────────────────────────────────────────────────────
-
-    /** Admin: list all applications */
+    
     @PreAuthorize("hasRole('admin')")
     @GetMapping
     public ResponseEntity<List<Application>> getAllApplications() {
         return ResponseEntity.ok(applicationService.getAllApplications());
     }
 
-    /** Admin: assign an application to an underwriter */
+   
     @PreAuthorize("hasRole('admin')")
     @PatchMapping("/{id}/assign")
     public ResponseEntity<Application> assignToUnderwriter(@PathVariable Long id,
@@ -88,15 +91,13 @@ public class ApplicationController {
         return ResponseEntity.ok(applicationService.assignToUnderwriter(id, underwriterEmail, auth.getName()));
     }
 
-    // ── Shared: members of an application ─────────────────────────────────────
+    
 
-    /**
-     * Underwriter or Admin: retrieve the list of PolicyMembers for a specific application.
-     * Useful during review of family plan applications.
-     */
+   
     @PreAuthorize("hasRole('UNDERWRITER') or hasRole('admin')")
     @GetMapping("/{id}/members")
     public ResponseEntity<List<PolicyMember>> getApplicationMembers(@PathVariable Long id) {
         return ResponseEntity.ok(applicationService.getMembersForApplication(id));
     }
 }
+//remove all comments from this file

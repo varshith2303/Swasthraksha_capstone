@@ -16,6 +16,15 @@ public class ClaimResponse {
     private String claimReason;
     private String policyNumber;
     private LocalDate submittedDate;
+    private LocalDate reviewedDate;
+
+    public LocalDate getReviewedDate() {
+        return reviewedDate;
+    }
+
+    public void setReviewedDate(LocalDate reviewedDate) {
+        this.reviewedDate = reviewedDate;
+    }
 
     public String getClaimNumber() {
         return claimNumber;

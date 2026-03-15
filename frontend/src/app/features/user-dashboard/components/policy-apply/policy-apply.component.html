@@ -66,6 +66,20 @@
                 {{ applyError() }}
             </div>
             }
+            @if (documentUploadSuccess()) {
+            <div class="flex items-center gap-3 px-5 py-4 rounded-xl text-sm font-medium animate-fade-in mb-8 shadow-sm"
+                style="background: #ecfdf5; border: 1px solid #a7f3d0; color: #059669;">
+                <i class="fa-solid fa-circle-check text-lg"></i>
+                {{ documentUploadSuccess() }}
+            </div>
+            }
+            @if (documentUploadError()) {
+            <div class="flex items-center gap-3 px-5 py-4 rounded-xl text-sm font-medium animate-fade-in mb-8 shadow-sm"
+                style="background: #fef2f2; border: 1px solid #fecaca; color: #dc2626;">
+                <i class="fa-solid fa-circle-exclamation text-lg"></i>
+                {{ documentUploadError() }}
+            </div>
+            }
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
 
@@ -177,6 +191,34 @@
 
                         <app-member-list [members]="members" [isFamily]="planType === 'FAMILY'">
                         </app-member-list>
+                    </div>
+
+                    <div class="w-full h-px bg-gray-100"></div>
+
+                    <div class="flex flex-col gap-6">
+                        <div class="flex items-center gap-3">
+                            <span
+                                class="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-xs shadow-sm border border-blue-100">3</span>
+                            <h3 class="text-base font-bold text-gray-800">Upload Documents</h3>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 p-4 bg-gray-50/50 rounded-2xl border border-gray-100">
+                            <div class="flex flex-col gap-2">
+                                <label class="text-[0.65rem] font-bold text-gray-500 uppercase tracking-widest">Upload ID Proof</label>
+                                <input type="file" accept=".pdf,.jpg,.jpeg,.png" (change)="onFileSelected($event, 'ID_PROOF')"
+                                    class="w-full px-4 py-2.5 rounded-xl text-sm text-gray-700 bg-white border border-gray-200" />
+                                <span class="text-xs text-gray-500">{{ getSelectedFileName('ID_PROOF') }}</span>
+                            </div>
+
+                            <div class="flex flex-col gap-2">
+                                <label class="text-[0.65rem] font-bold text-gray-500 uppercase tracking-widest">Upload Medical Report</label>
+                                <input type="file" accept=".pdf,.jpg,.jpeg,.png" (change)="onFileSelected($event, 'MEDICAL_REPORT')"
+                                    class="w-full px-4 py-2.5 rounded-xl text-sm text-gray-700 bg-white border border-gray-200" />
+                                <span class="text-xs text-gray-500">{{ getSelectedFileName('MEDICAL_REPORT') }}</span>
+                            </div>
+
+                            <p class="md:col-span-2 text-xs text-gray-500">Allowed types: PDF/JPG/PNG · Max size: 10MB per file</p>
+                        </div>
                     </div>
 
                 </div>

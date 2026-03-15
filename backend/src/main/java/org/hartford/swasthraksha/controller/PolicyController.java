@@ -25,7 +25,14 @@ public class PolicyController {
         return ResponseEntity.status(HttpStatus.CREATED).body(policyService.addPolicy(p));
     }
 
-    /** Admin: delete a policy by id */
+    /** Admin: soft-delete a policy by toggling its active status */
+    @PreAuthorize("hasRole('admin')")
+    @PatchMapping("/{id}/toggle-status")
+    public ResponseEntity<Policy> toggleStatus(@PathVariable Long id) {
+        return ResponseEntity.ok(policyService.toggleStatus(id));
+    }
+
+    /** Admin: hard-delete a policy by id */
     @PreAuthorize("hasRole('admin')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deletePolicy(@PathVariable Long id) {
@@ -34,14 +41,19 @@ public class PolicyController {
     }
 
     /**
-     * Public: list all active policies.
+     * Public: list policies.
      * Optional ?type=INDIVIDUAL|FAMILY|BOTH — filters by planType.
-     * Policies tagged BOTH always appear in both INDIVIDUAL and FAMILY filters.
+     * Optional ?adminView=true — shows all policies including inactive (admin only).
+     * By default only active policies are returned.
      */
     @GetMapping
     public ResponseEntity<List<Policy>> getAllPolicies(
-            @RequestParam(required = false) String type) {
+            @RequestParam(required = false) String type,
+            @RequestParam(required = false, defaultValue = "false") boolean adminView) {
         List<Policy> all = policyService.getAllPolicies();
+        if (!adminView) {
+            all = all.stream().filter(Policy::isActive).collect(Collectors.toList());
+        }
         if (type != null && !type.isBlank()) {
             String t = type.toUpperCase();
             all = all.stream()

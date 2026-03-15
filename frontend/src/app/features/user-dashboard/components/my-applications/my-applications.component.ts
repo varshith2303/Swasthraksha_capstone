@@ -41,7 +41,7 @@ export class MyApplicationsComponent {
             case 'SUBMITTED': return 'Submitted';
             case 'UNDER_REVIEW': return 'Under Review';
             case 'QUOTE_GENERATED': return 'Quote Ready';
-            case 'WAITING_CUSTOMER_ACCEPTANCE': return 'Offer Received';
+            case 'WAITING_CUSTOMER_ACCEPTANCE': return 'Waiting Acceptance';
             case 'APPROVED': return 'Approved';
             case 'CUSTOMER_ACCEPTED': return 'Accepted';
             case 'CUSTOMER_DECLINED': return 'Declined';
@@ -66,6 +66,18 @@ export class MyApplicationsComponent {
     onDecline(app: Application): void {
         this.actionLoading[app.id] = true;
         this.userService.declineApplication(app.id).subscribe({
+            next: () => {
+                this.actionLoading[app.id] = false;
+                this.statusUpdated.emit();
+            },
+            error: () => { this.actionLoading[app.id] = false; }
+        });
+    }
+
+    onMakeFirstPayment(app: Application): void {
+        if (!app.applicationNumber) return;
+        this.actionLoading[app.id] = true;
+        this.userService.makeFirstPayment(app.applicationNumber).subscribe({
             next: () => {
                 this.actionLoading[app.id] = false;
                 this.statusUpdated.emit();

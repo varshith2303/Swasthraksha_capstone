@@ -1,0 +1,226 @@
+<div class="flex items-start justify-between mb-7 gap-4">
+    <div>
+        <h1 class="text-2xl font-extrabold text-gray-900 tracking-tight mb-0.5">Insurance Policies</h1>
+        <p class="text-sm text-gray-400">Manage all health insurance policies</p>
+    </div>
+    <button id="add-policy-btn"
+        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold text-white shadow-lg transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl"
+        style="background: linear-gradient(135deg,#1d4ed8,#2563eb); box-shadow: 0 4px 14px rgba(37,99,235,0.3);"
+        (click)="openAdd()">
+        <i class="fa-solid fa-plus text-xs"></i>
+        Add Policy
+    </button>
+</div>
+
+@if (success) {
+<div class="flex items-center gap-2.5 px-4 py-3 rounded-xl text-sm font-medium mb-5 shadow-sm"
+    style="background: #ecfdf5; border: 1px solid #a7f3d0; color: #059669;">
+    <i class="fa-solid fa-circle-check text-base"></i>{{ success }}
+</div>
+}
+@if (error) {
+<div class="flex items-center gap-2.5 px-4 py-3 rounded-xl text-sm font-medium mb-5 shadow-sm"
+    style="background: #fef2f2; border: 1px solid #fecaca; color: #dc2626;">
+    <i class="fa-solid fa-circle-exclamation text-base"></i>{{ error }}
+</div>
+}
+
+<!-- Modal -->
+@if (showForm) {
+<div class="fixed inset-0 flex items-center justify-center z-50"
+    style="background: rgba(15,23,42,0.45); backdrop-filter: blur(6px);" (click)="cancelForm()">
+    <div class="bg-white rounded-2xl w-[580px] max-w-[95vw] shadow-2xl overflow-hidden animate-slide-up"
+        style="border: 1px solid #dbeafe;" (click)="$event.stopPropagation()">
+        <div class="flex items-center justify-between px-6 py-5 border-b"
+            style="background: #eff6ff80; border-color: #dbeafe;">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl flex items-center justify-center shadow-sm"
+                    style="background: linear-gradient(135deg, #1d4ed8, #2563eb);">
+                    <i class="fa-solid fa-file-shield text-white text-sm"></i>
+                </div>
+                <h2 class="text-lg font-bold text-gray-900">{{ editingPolicy ? 'Edit Policy' : 'Add New Policy' }}</h2>
+            </div>
+            <button
+                class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:bg-gray-100 hover:text-gray-700 transition-all duration-150"
+                (click)="cancelForm()">
+                <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
+        </div>
+        <form class="px-6 py-5 flex flex-col gap-4" (ngSubmit)="save()" #pf="ngForm">
+            @if (error) {
+            <div class="flex items-center gap-2.5 px-4 py-3 rounded-xl text-sm font-medium"
+                style="background: #fef2f2; border: 1px solid #fecaca; color: #dc2626;">
+                <i class="fa-solid fa-circle-exclamation text-base"></i>{{ error }}
+            </div>
+            }
+            <div class="grid grid-cols-2 gap-4">
+                <div class="flex flex-col gap-1.5 group">
+                    <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider"
+                        for="policyName">Policy Name</label>
+                    <input id="policyName" type="text"
+                        class="w-full px-3.5 py-2.5 rounded-xl text-sm text-gray-900 outline-none transition-all border group-hover:border-blue-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 shadow-sm"
+                        style="background: #f9fafb; border: 1.5px solid #e5e7eb;"
+                        [(ngModel)]="form.policyName" name="policyName"
+                        placeholder="e.g. Gold Health Plan" required />
+                </div>
+                <div class="flex flex-col gap-1.5 group">
+                    <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider"
+                        for="policyCode">Policy Code</label>
+                    <input id="policyCode" type="text"
+                        class="w-full px-3.5 py-2.5 rounded-xl text-sm text-gray-900 outline-none transition-all border group-hover:border-blue-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 shadow-sm"
+                        style="background: #f9fafb; border: 1.5px solid #e5e7eb;"
+                        [(ngModel)]="form.policyCode" name="policyCode" placeholder="e.g. GHP-001"
+                        required />
+                </div>
+                <div class="flex flex-col gap-1.5 group">
+                    <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider"
+                        for="minCoverage">Min Coverage (₹)</label>
+                    <input id="minCoverage" type="number"
+                        class="w-full px-3.5 py-2.5 rounded-xl text-sm text-gray-900 outline-none transition-all border group-hover:border-blue-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 shadow-sm"
+                        style="background: #f9fafb; border: 1.5px solid #e5e7eb;"
+                        [(ngModel)]="form.minCoverage" name="minCoverage" min="0" required />
+                </div>
+                <div class="flex flex-col gap-1.5 group">
+                    <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider"
+                        for="maxCoverage">Max Coverage (₹)</label>
+                    <input id="maxCoverage" type="number"
+                        class="w-full px-3.5 py-2.5 rounded-xl text-sm text-gray-900 outline-none transition-all border group-hover:border-blue-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 shadow-sm"
+                        style="background: #f9fafb; border: 1.5px solid #e5e7eb;"
+                        [(ngModel)]="form.maxCoverage" name="maxCoverage" min="0" required />
+                </div>
+                <div class="flex flex-col gap-1.5 group">
+                    <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider"
+                        for="basePercent">Base Premium (%)</label>
+                    <input id="basePercent" type="number"
+                        class="w-full px-3.5 py-2.5 rounded-xl text-sm text-gray-900 outline-none transition-all border group-hover:border-blue-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 shadow-sm"
+                        style="background: #f9fafb; border: 1.5px solid #e5e7eb;"
+                        [(ngModel)]="form.basePercent" name="basePercent" min="0" max="100" step="0.01"
+                        required />
+                </div>
+                <div class="flex flex-col gap-1.5 group">
+                    <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider"
+                        for="planType">Plan Type</label>
+                    <select id="planType"
+                        class="w-full px-3.5 py-2.5 rounded-xl text-sm text-gray-900 outline-none transition-all border group-hover:border-blue-300 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 shadow-sm"
+                        style="background: #f9fafb; border: 1.5px solid #e5e7eb;"
+                        [(ngModel)]="form.planType" name="planType" required>
+                        <option value="INDIVIDUAL">Individual Only</option>
+                        <option value="FAMILY">Family Only</option>
+                        <option value="BOTH">Both (Individual & Family)</option>
+                    </select>
+                </div>
+                <div class="flex flex-col gap-1.5 justify-end">
+                    <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</label>
+                    <label class="flex items-center gap-2.5 cursor-pointer text-sm font-semibold text-gray-700">
+                        <input id="policyActive" type="checkbox" class="hidden" [(ngModel)]="form.active"
+                            name="active" />
+                        <span
+                            class="w-11 h-6 rounded-full relative transition-all duration-300 flex items-center p-0.5 shadow-sm"
+                            [style]="form.active ? 'background: #1d4ed8;' : 'background: #d1d5db;'">
+                            <span class="w-5 h-5 rounded-full bg-white shadow-md transition-all duration-300"
+                                [style]="form.active ? 'transform:translateX(20px);' : 'transform:translateX(0);'"></span>
+                        </span>
+                        <span [style.color]="form.active ? '#1d4ed8' : '#9ca3af'">
+                            {{ form.active ? 'Active' : 'Inactive' }}
+                        </span>
+                    </label>
+                </div>
+            </div>
+            <div class="flex justify-end gap-2.5 pt-2 border-t border-gray-100 mt-1">
+                <button type="button"
+                    class="px-5 py-2.5 rounded-xl text-sm font-semibold text-gray-500 bg-white border border-gray-200 hover:bg-gray-50 transition-all duration-150 shadow-sm"
+                    (click)="cancelForm()">Cancel</button>
+                <button id="save-policy-btn" type="submit"
+                    class="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+                    style="background: linear-gradient(135deg,#1d4ed8,#2563eb); box-shadow: 0 4px 12px rgba(37,99,235,0.3);"
+                    [disabled]="loading || pf.invalid">
+                    @if (loading) {
+                    <span class="inline-block w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                    }
+                    @if (!loading) {
+                    <i class="fa-solid fa-floppy-disk text-xs"></i>
+                    }
+                    {{ editingPolicy ? 'Update Policy' : 'Save Policy' }}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+}
+
+@if (loading && policies().length === 0) {
+<div class="flex flex-col items-center justify-center gap-4 p-16 bg-white rounded-2xl border border-gray-100 shadow-sm text-gray-400">
+    <span class="inline-block w-8 h-8 border-[3px] border-blue-200 border-t-blue-600 rounded-full animate-spin"></span>
+    <p class="text-sm">Loading policies...</p>
+</div>
+} @else if (policies().length === 0) {
+<div class="flex flex-col items-center justify-center gap-4 p-16 bg-white rounded-2xl border border-gray-100 shadow-sm text-gray-400">
+    <i class="fa-solid fa-file-circle-xmark text-5xl opacity-25"></i>
+    <p class="text-sm font-medium">No policies found. Add your first policy!</p>
+</div>
+} @else {
+<div class="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
+    <table class="w-full border-collapse text-sm">
+        <thead>
+            <tr style="background: #eff6ff; border-bottom: 1.5px solid #dbeafe;">
+                <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">#</th>
+                <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Policy Name</th>
+                <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Code</th>
+                <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Min Coverage</th>
+                <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Max Coverage</th>
+                <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Base %</th>
+                <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Plan Type</th>
+                <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Status</th>
+                <th class="px-4 py-3.5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (policy of policies(); track policy.id; let i = $index) {
+            <tr class="border-b border-gray-50 hover:bg-blue-50/30 transition-colors duration-150">
+                <td class="px-4 py-3.5 text-gray-400 tabular-nums text-xs font-medium">{{ i + 1 }}</td>
+                <td class="px-4 py-3.5 font-semibold text-gray-800">{{ policy.policyName }}</td>
+                <td class="px-4 py-3.5">
+                    <span class="px-2.5 py-1 rounded-lg text-xs font-bold font-mono shadow-sm"
+                        style="background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe;">{{ policy.policyCode }}</span>
+                </td>
+                <td class="px-4 py-3.5 text-gray-600 font-medium">₹{{ policy.minCoverage | number }}</td>
+                <td class="px-4 py-3.5 text-gray-600 font-medium">₹{{ policy.maxCoverage | number }}</td>
+                <td class="px-4 py-3.5 font-semibold" style="color: #1d4ed8;">{{ policy.basePercent }}%</td>
+                <td class="px-4 py-3.5">
+                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[0.65rem] font-bold"
+                        [style]="policy.planType === 'BOTH' ? 'background:#f0fdf4; color:#166534;' : (policy.planType === 'FAMILY' ? 'background:#f5f3ff; color:#5b21b6;' : 'background:#eff6ff; color:#1e40af;')">
+                        {{ policy.planType === 'BOTH' ? 'INDIVIDUAL & FAMILY' : policy.planType }}
+                    </span>
+                </td>
+                <td class="px-4 py-3.5">
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold shadow-sm"
+                        [style]="policy.active ? 'background:#ecfdf5; color:#059669; border:1px solid #a7f3d0;' : 'background:#fef2f2; color:#dc2626; border:1px solid #fecaca;'">
+                        <span class="w-1.5 h-1.5 rounded-full bg-current"></span>
+                        {{ policy.active ? 'Active' : 'Inactive' }}
+                    </span>
+                </td>
+                <td class="px-4 py-3.5">
+                    <div class="flex items-center gap-1.5">
+                        <button [id]="'edit-policy-' + policy.id" title="Edit"
+                            class="w-7 h-7 rounded-lg flex items-center justify-center text-gray-400 hover:text-blue-600 border border-gray-200 hover:border-blue-200 hover:bg-blue-50 transition-all duration-150"
+                            (click)="openEdit(policy)">
+                            <i class="fa-solid fa-pen-to-square text-xs"></i>
+                        </button>
+                        <button [id]="'toggle-policy-' + policy.id"
+                            [title]="policy.active ? 'Deactivate' : 'Activate'"
+                            class="w-7 h-7 rounded-lg flex items-center justify-center border transition-all duration-150"
+                            [style]="policy.active ? 'color:#dc2626; border-color:#fecaca; background:#fff5f5;' : 'color:#059669; border-color:#a7f3d0; background:#f0fdf4;'"
+                            (click)="toggleStatus(policy)">
+                            <i [class]="'fa-solid text-xs ' + (policy.active ? 'fa-ban' : 'fa-circle-check')"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+    <div class="px-4 py-3 text-xs text-gray-400 border-t border-gray-50 font-medium" style="background: #eff6ff50;">
+        {{ policies().length }} polic{{ policies().length === 1 ? 'y' : 'ies' }} total
+    </div>
+</div>
+}

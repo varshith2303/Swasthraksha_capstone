@@ -26,7 +26,13 @@ public class PolicyService {
             return;
         }
         throw new RuntimeException("Policy not found");
+    }
 
+    public Policy toggleStatus(Long id) {
+        Policy policy = policyRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Policy not found"));
+        policy.setActive(!policy.isActive());
+        return policyRepository.save(policy);
     }
 
     public List<Policy> getAllPolicies() {

@@ -39,7 +39,6 @@ public class ClaimService {
             throw new IllegalArgumentException("User not found: " + email);
         }
 
-        // Ensure the policy belongs to this claimant
         if (!p.getUser().getEmail().equals(email)) {
             throw new IllegalStateException("Unauthorized: this policy does not belong to you.");
         }
@@ -64,9 +63,10 @@ public class ClaimService {
         LocalDate baseline = claimRepository.findLatestClaimDateByPolicy(p)
                 .map(LocalDateTime::toLocalDate)
                 .orElse(p.getStartDate());
+        Integer days=p.getApplication().getPolicy().getWaitingPeriodDays();
 
-        if (LocalDate.now().isBefore(baseline.plusDays(30))) {
-            long daysLeft = ChronoUnit.DAYS.between(LocalDate.now(), baseline.plusDays(30));
+        if (LocalDate.now().isBefore(baseline.plusDays(days))) {
+            long daysLeft = ChronoUnit.DAYS.between(LocalDate.now(), baseline.plusDays(days));
             throw new IllegalStateException(
                     "Waiting period not met. You can file a new claim in " + daysLeft + " day(s).");
         }
@@ -109,6 +109,7 @@ public class ClaimService {
         response.setAdmissionDate(c.getAdmissionDate());
         response.setDischargeDate(c.getDischargeDate());
         response.setClaimReason(c.getClaimReason());
+        response.setReviewedDate(c.getReviewDate());
         if (c.getPolicy() != null) {
             response.setPolicyNumber(c.getPolicy().getPolicyNumber());
             if (c.getPolicy().getApplication() != null && c.getPolicy().getApplication().getPolicy() != null) {
@@ -180,7 +181,10 @@ public class ClaimService {
 
             claim.setApprovedAmount(approvedAmt);
             claim.setStatus(ClaimStatus.APPROVED);
-
+            LocalDate baseline = claimRepository.findLatestClaimDateByPolicy(policy)
+                    .map(LocalDateTime::toLocalDate)
+                    .orElse(policy.getStartDate());
+            policy.setLatestClaimDate(LocalDate.now());
             policy.setRemainingCoverage(remaining - approvedAmt);
             policy.setTotalClaimedAmount(
                     (policy.getTotalClaimedAmount() != null ? policy.getTotalClaimedAmount() : 0.0) + approvedAmt);

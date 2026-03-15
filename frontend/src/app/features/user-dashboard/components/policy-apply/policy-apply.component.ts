@@ -1,7 +1,9 @@
 import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Policy, ApplicationRequest, PolicyMemberRequest, UserService } from '../../../../services/user.service';
+import { forkJoin, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+import { Policy, ApplicationRequest, PolicyMemberRequest, UserService, DocumentType } from '../../../../services/user.service';
 import { MemberListComponent } from './member-list/member-list.component';
 
 @Component({
@@ -22,6 +24,13 @@ export class PolicyApplyComponent implements OnChanges {
     applyLoading = false;
     applySuccess = signal('');
     applyError = signal('');
+    documentUploadSuccess = signal('');
+    documentUploadError = signal('');
+
+    readonly allowedFileTypes = ['application/pdf', 'image/jpeg', 'image/png'];
+    readonly maxFileSize = 10 * 1024 * 1024;
+
+    selectedDocuments: Partial<Record<DocumentType, File>> = {};
 
     form = {
         policyCode: '',
@@ -113,6 +122,8 @@ export class PolicyApplyComponent implements OnChanges {
     onSubmit(): void {
         this.applyError.set('');
         this.applySuccess.set('');
+        this.documentUploadError.set('');
+        this.documentUploadSuccess.set('');
 
         // Basic validation
         if (!this.form.policyCode) {
@@ -139,16 +150,105 @@ export class PolicyApplyComponent implements OnChanges {
         this.applyLoading = true;
         this.userService.applyForPolicy(request).subscribe({
             next: (res) => {
-                this.applyLoading = false;
-                this.applySuccess.set(res.applicationNumber!);
-                this.resetForm();
-                this.applicationSubmitted.emit();
+                const applicationNumber = res.applicationNumber;
+                if (!applicationNumber) {
+                    this.applyLoading = false;
+                    this.applySuccess.set('Application submitted');
+                    this.resetForm();
+                    this.applicationSubmitted.emit();
+                    return;
+                }
+
+                const uploads = this.buildApplicationUploadRequests(applicationNumber);
+                if (uploads.length === 0) {
+                    this.applyLoading = false;
+                    this.applySuccess.set(applicationNumber);
+                    this.resetForm();
+                    this.applicationSubmitted.emit();
+                    return;
+                }
+
+                forkJoin(uploads).subscribe({
+                    next: (results) => {
+                        const successCount = results.filter(r => r.ok).length;
+                        const failed = results.filter(r => !r.ok);
+
+                        if (successCount > 0) {
+                            this.documentUploadSuccess.set(`${successCount} document(s) uploaded successfully.`);
+                        }
+                        if (failed.length > 0) {
+                            this.documentUploadError.set(failed[0].message || 'Some documents failed to upload.');
+                        }
+
+                        this.applyLoading = false;
+                        this.applySuccess.set(applicationNumber);
+                        this.resetForm();
+                        this.applicationSubmitted.emit();
+                    },
+                    error: () => {
+                        this.applyLoading = false;
+                        this.applySuccess.set(applicationNumber);
+                        this.documentUploadError.set('Application submitted, but document upload failed.');
+                        this.resetForm();
+                        this.applicationSubmitted.emit();
+                    }
+                });
             },
             error: (err) => {
                 this.applyLoading = false;
                 this.applyError.set(err.error?.message || 'Failed to submit application. Please verify all details or try again later.');
             }
         });
+    }
+
+    onFileSelected(event: Event, documentType: DocumentType): void {
+        const input = event.target as HTMLInputElement;
+        const file = input.files?.[0];
+
+        if (!file) {
+            this.selectedDocuments[documentType] = undefined;
+            return;
+        }
+
+        const validationMessage = this.validateFile(file);
+        if (validationMessage) {
+            this.documentUploadError.set(validationMessage);
+            this.selectedDocuments[documentType] = undefined;
+            input.value = '';
+            return;
+        }
+
+        this.documentUploadError.set('');
+        this.selectedDocuments[documentType] = file;
+    }
+
+    getSelectedFileName(documentType: DocumentType): string {
+        return this.selectedDocuments[documentType]?.name || 'No file selected';
+    }
+
+    private validateFile(file: File): string | null {
+        if (!this.allowedFileTypes.includes(file.type)) {
+            return 'Only PDF, JPG, and PNG files are allowed.';
+        }
+        if (file.size > this.maxFileSize) {
+            return 'File size must be 10MB or less.';
+        }
+        return null;
+    }
+
+    private buildApplicationUploadRequests(applicationNumber: string) {
+        return (Object.entries(this.selectedDocuments) as [DocumentType, File | undefined][])
+            .filter(([, file]) => !!file)
+            .map(([documentType, file]) => this.userService
+                .uploadApplicationDocument(applicationNumber, documentType, file!)
+                .pipe(
+                    map(() => ({ ok: true, message: '' })),
+                    catchError((err) => of({
+                        ok: false,
+                        message: err.error?.message || `Failed to upload ${documentType}`
+                    }))
+                )
+            );
     }
 
     resetForm(): void {
@@ -159,5 +259,6 @@ export class PolicyApplyComponent implements OnChanges {
         };
         this.selectedPolicy = null;
         this.resetMembers();
+        this.selectedDocuments = {};
     }
 }

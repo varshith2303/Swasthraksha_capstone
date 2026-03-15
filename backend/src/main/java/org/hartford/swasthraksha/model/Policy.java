@@ -18,6 +18,16 @@ public class Policy {
     private double maxCoverage;
     private double basePercent;
     private boolean active;
+    private Integer waitingPeriodDays;
+
+    public Integer getWaitingPeriodDays() {
+        return waitingPeriodDays;
+    }
+
+    public void setWaitingPeriodDays(Integer waitingPeriodDays) {
+        this.waitingPeriodDays = waitingPeriodDays;
+    }
+
     /**
      * INDIVIDUAL, FAMILY, or BOTH (default). Controls which applicant plan types
      * can use this policy.

@@ -181,6 +181,21 @@ public class ApplicationService {
         return applicationRepository.getByUserEmail(email);
     }
 
+    public Application acceptApplication(String applicationNumber, String userEmail) {
+        Application app = applicationRepository.getByApplicationNumber(applicationNumber);
+        if (app == null) {
+            throw new RuntimeException("Application not found: " + applicationNumber);
+        }
+        if (!app.getUser().getEmail().equals(userEmail)) {
+            throw new RuntimeException("Unauthorized: this application does not belong to you");
+        }
+        if (app.getStatus() != ApplicationStatus.WAITING_CUSTOMER_ACCEPTANCE) {
+            throw new RuntimeException("Application is not awaiting your acceptance");
+        }
+        app.setStatus(ApplicationStatus.CUSTOMER_ACCEPTED);
+        return applicationRepository.save(app);
+    }
+
     public Application declineApplication(Long id, String userEmail) {
         Application app = applicationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Application not found"));

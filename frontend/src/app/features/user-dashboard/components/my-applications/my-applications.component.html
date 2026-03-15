@@ -122,7 +122,26 @@
                 } @else {
                 <i class="fa-solid fa-check text-xs"></i>
                 }
-                Accept & Pay
+                Accept
+            </button>
+        </div>
+        }
+
+        @if (app.status === 'CUSTOMER_ACCEPTED') {
+        <div class="flex flex-col gap-2 border-t border-gray-100 pt-4 mt-auto">
+            <p class="text-[0.72rem] text-emerald-600 font-medium flex items-center gap-1.5">
+                <i class="fa-solid fa-circle-check text-xs"></i>
+                You have accepted this offer. Complete your first payment to activate the policy.
+            </p>
+            <button (click)="onMakeFirstPayment(app)" [disabled]="actionLoading[app.id]"
+                class="w-full py-2.5 px-4 rounded-xl text-sm font-bold text-white transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-xl disabled:opacity-50 hover:-translate-y-0.5"
+                style="background: linear-gradient(135deg, #059669, #10b981); box-shadow: 0 4px 14px rgba(16,185,129,0.3);">
+                @if (actionLoading[app.id]) {
+                <span class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                } @else {
+                <i class="fa-solid fa-credit-card text-xs"></i>
+                }
+                Make First Payment
             </button>
         </div>
         }

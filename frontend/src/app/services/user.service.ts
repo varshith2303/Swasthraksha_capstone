@@ -96,8 +96,26 @@ export interface ClaimResponse {
     claimReason?: string;
     policyNumber?: string;
     submittedDate?: string;
+    reviewedDate?: string;
     policyName?: string;
     patientName?: string;
+}
+
+export type DocumentType =
+    | 'ID_PROOF'
+    | 'ADDRESS_PROOF'
+    | 'MEDICAL_REPORT'
+    | 'HOSPITAL_BILL'
+    | 'DISCHARGE_SUMMARY'
+    | 'PRESCRIPTION';
+
+export interface DocumentUploadResponse {
+    id: number;
+    fileName: string;
+    filePath: string;
+    fileType: string;
+    documentType: DocumentType;
+    uploadedDate: string;
 }
 
 @Injectable({
@@ -130,9 +148,14 @@ export class UserService {
         return this.http.patch<PolicyAssignment>(`${this.apiUrl}/policyassignments/${policyId}/pay`, {});
     }
 
-    // Accept an offer — creates a PolicyAssignment
-    acceptApplication(applicationNumber: string): Observable<any> {
-        return this.http.post(`${this.apiUrl}/policyassignments`, applicationNumber, {
+    // Accept an offer — sets application status to CUSTOMER_ACCEPTED
+    acceptApplication(applicationNumber: string): Observable<Application> {
+        return this.http.patch<Application>(`${this.apiUrl}/applications/${applicationNumber}/accept`, {});
+    }
+
+    // Make first payment — creates PolicyAssignment and activates policy
+    makeFirstPayment(applicationNumber: string): Observable<PolicyAssignment> {
+        return this.http.post<PolicyAssignment>(`${this.apiUrl}/policyassignments`, applicationNumber, {
             headers: { 'Content-Type': 'application/json' }
         });
     }
@@ -149,5 +172,21 @@ export class UserService {
 
     getMyClaims(): Observable<ClaimResponse[]> {
         return this.http.get<ClaimResponse[]>(`${this.apiUrl}/claims/my`);
+    }
+
+    uploadApplicationDocument(applicationNumber: string, documentType: DocumentType, file: File): Observable<DocumentUploadResponse> {
+        const formData = new FormData();
+        formData.append('applicationNumber', applicationNumber);
+        formData.append('documentType', documentType);
+        formData.append('file', file);
+        return this.http.post<DocumentUploadResponse>(`${this.apiUrl}/api/documents/upload/application`, formData);
+    }
+
+    uploadClaimDocument(claimNumber: string, documentType: DocumentType, file: File): Observable<DocumentUploadResponse> {
+        const formData = new FormData();
+        formData.append('claimNumber', claimNumber);
+        formData.append('documentType', documentType);
+        formData.append('file', file);
+        return this.http.post<DocumentUploadResponse>(`${this.apiUrl}/api/documents/upload/claim`, formData);
     }
 }

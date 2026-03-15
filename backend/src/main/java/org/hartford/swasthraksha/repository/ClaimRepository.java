@@ -20,6 +20,6 @@ public interface ClaimRepository extends JpaRepository<Claim, Long> {
 
     List<Claim> findByReviewedBy(Users officer);
 
-    @Query("SELECT MAX(c.createdAt) FROM Claim c WHERE c.policy = :policy")
+    @Query("SELECT MAX(c.reviewDate) FROM Claim c WHERE c.policy = :policy and c.status = 'APPROVED'")
     Optional<LocalDateTime> findLatestClaimDateByPolicy(@Param("policy") PolicyAssignment policy);
 }

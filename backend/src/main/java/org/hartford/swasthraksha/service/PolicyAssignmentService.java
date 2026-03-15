@@ -68,8 +68,8 @@ public class PolicyAssignmentService {
             throw new RuntimeException("Unauthorized: Application does not belong to user");
         }
 
-        if (app.getStatus() != org.hartford.swasthraksha.model.ApplicationStatus.WAITING_CUSTOMER_ACCEPTANCE) {
-            throw new RuntimeException("Application status must be WAITING_CUSTOMER_ACCEPTANCE");
+        if (app.getStatus() != org.hartford.swasthraksha.model.ApplicationStatus.CUSTOMER_ACCEPTED) {
+            throw new RuntimeException("Application must be in CUSTOMER_ACCEPTED status to make first payment");
         }
 
         PolicyAssignment assignment = new PolicyAssignment();
@@ -112,8 +112,13 @@ public class PolicyAssignmentService {
         assignment.setLastRenewalDate(null);
         assignment.setNoClaimBonusPercentage(0.0);
 
-        // Policy lifecycle status
-        assignment.setStatus(PolicyStatus.PENDING_PAYMENT);
+        // Activate policy immediately upon first payment
+        assignment.setStatus(PolicyStatus.ACTIVE);
+        assignment.setPremiumPaid(yearlyPremium);
+        assignment.setPaidInstallments(1);
+        LocalDate startDate = LocalDate.now();
+        assignment.setStartDate(startDate);
+        assignment.setEndDate(startDate.plusYears(duration));
 
         PolicyAssignment saved = pa.save(assignment);
 

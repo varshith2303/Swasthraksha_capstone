@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../../../services/auth.service';
 import { UnderwriterService, UnderwriterDecision } from '../../../../services/underwriter.service';
 import { Application } from '../../../../services/user.service';
+import { DocumentItem, DocumentService } from '../../../../services/document.service';
 
 @Component({
     selector: 'app-underwriter',
@@ -21,9 +22,15 @@ export class UnderwriterComponent implements OnInit {
     allApplications = signal<Application[]>([]);
     isLoading = false;
 
+    visibleDocuments: Record<number, boolean> = {};
+    applicationDocuments: Record<number, DocumentItem[]> = {};
+    documentsLoading: Record<number, boolean> = {};
+    documentsError: Record<number, string> = {};
+
     constructor(
         private authService: AuthService,
         private underwriterService: UnderwriterService,
+        private documentService: DocumentService,
         private router: Router
     ) { }
 
@@ -87,6 +94,47 @@ export class UnderwriterComponent implements OnInit {
                 this.loadAllApplications();
             },
             error: (err) => alert('Operation failed: ' + (err.error?.message || 'Unknown error'))
+        });
+    }
+
+    toggleDocuments(applicationId: number): void {
+        const isVisible = !!this.visibleDocuments[applicationId];
+        this.visibleDocuments[applicationId] = !isVisible;
+
+        if (!isVisible && !this.applicationDocuments[applicationId]) {
+            this.loadDocuments(applicationId);
+        }
+    }
+
+    private loadDocuments(applicationId: number): void {
+        this.documentsLoading[applicationId] = true;
+        this.documentsError[applicationId] = '';
+
+        this.documentService.getApplicationDocuments(applicationId).subscribe({
+            next: (docs) => {
+                this.applicationDocuments[applicationId] = docs;
+                this.documentsLoading[applicationId] = false;
+            },
+            error: (err) => {
+                this.documentsError[applicationId] = err.error?.message || 'Failed to load documents';
+                this.documentsLoading[applicationId] = false;
+            }
+        });
+    }
+
+    downloadDocument(doc: DocumentItem): void {
+        this.documentService.downloadDocument(doc.id).subscribe({
+            next: (blob) => {
+                const blobUrl = URL.createObjectURL(blob);
+                const anchor = document.createElement('a');
+                anchor.href = blobUrl;
+                anchor.download = doc.fileName || `document-${doc.id}`;
+                anchor.click();
+                URL.revokeObjectURL(blobUrl);
+            },
+            error: () => {
+                alert('Failed to download document. Please try again.');
+            }
         });
     }
 

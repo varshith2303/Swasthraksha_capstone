@@ -7,12 +7,7 @@ public class ApplicationRequest {
     private Integer duration;
     private String policyCode;
 
-    /**
-     * List of plan members — must contain at least 1 entry.
-     * - 1 member  → individual plan; auto-underwritten.
-     * - 2+ members → family plan; sent to UNDER_REVIEW for manual assessment.
-     * All member fields (name, age, bmi, smoker, existingDiseases) are required.
-     */
+
     private List<PolicyMemberRequest> members;
 
     public Double getRequestedCoverage() {
