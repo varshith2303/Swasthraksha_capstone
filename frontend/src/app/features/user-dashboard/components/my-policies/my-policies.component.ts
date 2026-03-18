@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PolicyAssignment, UserService } from '../../../../services/user.service';
+import { PolicyAssignment, UserService } from '../../services/user.service';
 
 @Component({
     selector: 'app-my-policies',

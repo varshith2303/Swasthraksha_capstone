@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { forkJoin, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { Policy, ApplicationRequest, PolicyMemberRequest, UserService, DocumentType } from '../../../../services/user.service';
+import { Policy, ApplicationRequest, PolicyMemberRequest, UserService, DocumentType } from '../../services/user.service';
 import { MemberListComponent } from './member-list/member-list.component';
 
 @Component({

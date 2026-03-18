@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../../services/auth.service';
-import { UserService, Policy, Application, ApplicationRequest, PolicyAssignment, PolicyMemberRequest } from '../../../../services/user.service';
+import { UserService, Policy, Application, ApplicationRequest, PolicyAssignment, PolicyMemberRequest } from '../../services/user.service';
 
 // Sub-components
 import { SidebarComponent } from '../sidebar/sidebar.component';

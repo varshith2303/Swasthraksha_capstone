@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Policy } from '../../../../services/user.service';
+import { Policy } from '../../services/user.service';
 
 @Component({
     selector: 'app-policy-catalog',

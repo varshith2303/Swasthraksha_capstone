@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { forkJoin, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { PolicyAssignment, ClaimRequest, ClaimResponse, DocumentType, UserService } from '../../../../services/user.service';
+import { PolicyAssignment, ClaimRequest, ClaimResponse, DocumentType, UserService } from '../../services/user.service';
 
 @Component({
     selector: 'app-my-claims',

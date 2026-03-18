@@ -1,7 +1,7 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AdminService, Policy } from '../../../../services/admin.service';
+import { AdminService, Policy } from '../../services/admin.service';
 
 @Component({
     selector: 'app-admin-policies',
@@ -25,7 +25,7 @@ export class AdminPoliciesComponent implements OnInit {
     }
 
     emptyPolicy(): Policy {
-        return { policyName: '', policyCode: '', minCoverage: 0, maxCoverage: 0, basePercent: 0, active: true, planType: 'BOTH' };
+        return { policyName: '', policyCode: '', minCoverage: 0, maxCoverage: 0, basePercent: 0, active: true, planType: 'BOTH', waitingPeriod: 0 };
     }
 
     load(): void {

@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { PolicyMemberRequest } from '../../../../../services/user.service';
+import { PolicyMemberRequest } from '../../../services/user.service';
 import { MemberCardComponent } from '../member-card/member-card.component';
 
 @Component({

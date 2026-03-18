@@ -1,7 +1,7 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AdminService, Underwriter } from '../../../../services/admin.service';
+import { AdminService, Underwriter } from '../../services/admin.service';
 
 @Component({
     selector: 'app-admin-underwriters',

@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Application } from '../../../../services/user.service';
+import { Application } from '../../services/user.service';
 
 @Component({
     selector: 'app-sidebar',

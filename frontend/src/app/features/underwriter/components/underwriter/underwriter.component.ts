@@ -3,8 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../../services/auth.service';
-import { UnderwriterService, UnderwriterDecision } from '../../../../services/underwriter.service';
-import { Application } from '../../../../services/user.service';
+import { UnderwriterService, UnderwriterDecision, Application } from '../../services/underwriter.service';
 import { DocumentItem, DocumentService } from '../../../../services/document.service';
 
 @Component({

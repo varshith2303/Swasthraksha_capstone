@@ -2,7 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { DocumentType } from './user.service';
+
+export type DocumentType =
+    | 'ID_PROOF'
+    | 'ADDRESS_PROOF'
+    | 'MEDICAL_REPORT'
+    | 'HOSPITAL_BILL'
+    | 'DISCHARGE_SUMMARY'
+    | 'PRESCRIPTION';
 
 export interface DocumentItem {
     id: number;

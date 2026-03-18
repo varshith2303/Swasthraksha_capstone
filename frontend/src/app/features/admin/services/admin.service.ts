@@ -1,7 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../environments/environment';
+import { environment } from '../../../../environments/environment';
+
+export interface AppUser {
+    id: number;
+    username: string;
+    email: string;
+    role: string;
+}
 
 export interface Policy {
     id?: number;
@@ -12,6 +19,7 @@ export interface Policy {
     basePercent: number;
     active: boolean;
     planType: string;
+    waitingPeriod: number;
 }
 
 export interface Underwriter {
@@ -20,13 +28,6 @@ export interface Underwriter {
     email: string;
     password?: string;
     role?: string;
-}
-
-export interface AppUser {
-    id: number;
-    username: string;
-    email: string;
-    role: string;
 }
 
 export interface ApplicationSummary {
@@ -97,7 +98,6 @@ export class AdminService {
 
     constructor(private http: HttpClient) { }
 
-    // ── Policies ──────────────────────────────────────────────────
     getAllPolicies(): Observable<Policy[]> {
         return this.http.get<Policy[]>(`${this.apiUrl}/policies?adminView=true`);
     }
@@ -118,7 +118,6 @@ export class AdminService {
         return this.http.patch<Policy>(`${this.apiUrl}/policies/${id}/toggle-status`, null);
     }
 
-    // ── Underwriters ──────────────────────────────────────────────
     addUnderwriter(underwriter: Underwriter): Observable<Underwriter> {
         return this.http.post<Underwriter>(`${this.apiUrl}/admin/users`, underwriter);
     }
@@ -127,7 +126,6 @@ export class AdminService {
         return this.http.get<Underwriter[]>(`${this.apiUrl}/admin/users`);
     }
 
-    // ── Claims Officers ───────────────────────────────────────────
     addClaimsOfficer(officer: ClaimsOfficer): Observable<ClaimsOfficer> {
         return this.http.post<ClaimsOfficer>(`${this.apiUrl}/admin/claims-officers`, officer);
     }
@@ -140,7 +138,6 @@ export class AdminService {
         return this.http.delete<void>(`${this.apiUrl}/admin/users/${id}`);
     }
 
-    // ── Applications ──────────────────────────────────────────────
     getAllApplications(): Observable<ApplicationSummary[]> {
         return this.http.get<ApplicationSummary[]>(`${this.apiUrl}/applications`);
     }
@@ -154,7 +151,6 @@ export class AdminService {
         );
     }
 
-    // ── Claims ────────────────────────────────────────────────────
     getAllClaims(): Observable<Claim[]> {
         return this.http.get<Claim[]>(`${this.apiUrl}/claims`);
     }
@@ -167,10 +163,6 @@ export class AdminService {
         });
     }
 
-    getOfficerAssignedClaims(): Observable<Claim[]> {
-        return this.http.get<Claim[]>(`${this.apiUrl}/claims/assigned`);
-    }
-
     verifyClaim(claimNumber: string, approve: boolean): Observable<any> {
         const params = new HttpParams().set('approve', approve.toString());
         return this.http.post(`${this.apiUrl}/claims/${claimNumber}/verify`, null, {
@@ -179,7 +171,10 @@ export class AdminService {
         });
     }
 
-    // ── Issued Policies ───────────────────────────────────────────
+    getOfficerAssignedClaims(): Observable<Claim[]> {
+        return this.http.get<Claim[]>(`${this.apiUrl}/claims/assigned`);
+    }
+
     getAllIssuedPolicies(): Observable<IssuedPolicy[]> {
         return this.http.get<IssuedPolicy[]>(`${this.apiUrl}/policyassignments/all`);
     }

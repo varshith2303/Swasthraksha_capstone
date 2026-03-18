@@ -1,6 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AdminService, IssuedPolicy } from '../../../../services/admin.service';
+import { AdminService, IssuedPolicy } from '../../services/admin.service';
 
 @Component({
     selector: 'app-admin-issued-policies',

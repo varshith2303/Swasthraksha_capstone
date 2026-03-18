@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import {
     AdminService, Policy, Underwriter, ApplicationSummary, IssuedPolicy, Claim
-} from '../../../../services/admin.service';
+} from '../../services/admin.service';
 import { AuthService } from '../../../../services/auth.service';
 import { claimsOfficerGuard } from '../../../../guards/claims-officer.guard';
 
@@ -84,7 +84,7 @@ export class AdminComponent implements OnInit {
 
     // ── Helpers ───────────────────────────────────────────────────
     emptyPolicy(): Policy {
-        return { policyName: '', policyCode: '', minCoverage: 0, maxCoverage: 0, basePercent: 0, active: true, planType: 'BOTH' };
+        return { policyName: '', policyCode: '', minCoverage: 0, maxCoverage: 0, basePercent: 0, active: true, planType: 'BOTH', waitingPeriod: 0 };
     }
 
     emptyUnderwriter(): Underwriter {

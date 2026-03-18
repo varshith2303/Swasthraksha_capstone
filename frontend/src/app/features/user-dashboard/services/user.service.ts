@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../environments/environment';
+import { environment } from '../../../../environments/environment';
 
 export interface Policy {
     id?: number;
@@ -11,7 +11,7 @@ export interface Policy {
     maxCoverage: number;
     basePercent: number;
     active: boolean;
-    planType?: string; // 'INDIVIDUAL' | 'FAMILY' | 'BOTH'
+    planType?: string;
 }
 
 export interface PolicyMemberRequest {
@@ -20,7 +20,7 @@ export interface PolicyMemberRequest {
     bmi: number;
     smoker: boolean;
     existingDiseases: string;
-    relationship?: string; // 'SELF' | 'SPOUSE' | 'PARENT' | 'CHILD'
+    relationship?: string;
 }
 
 export interface ApplicationRequest {
@@ -34,7 +34,7 @@ export interface Application {
     id: number;
     applicationNumber?: string;
     status: string;
-    planType?: string;        // 'INDIVIDUAL' | 'FAMILY'
+    planType?: string;
     requestedCoverage: number;
     duration: number;
     riskScore?: number;
@@ -53,7 +53,6 @@ export interface Application {
         username: string;
     } | null;
 }
-
 
 export interface PolicyAssignment {
     id: number;
@@ -80,7 +79,7 @@ export interface ClaimRequest {
     claimAmount: number;
     hospitalName: string;
     claimReason: string;
-    admissionDate: string; // ISO date e.g. 2024-01-15
+    admissionDate: string;
     dischargeDate: string;
     memberId?: number;
 }
@@ -126,12 +125,10 @@ export class UserService {
 
     constructor(private http: HttpClient) { }
 
-    // Policies
     getAllPolicies(): Observable<Policy[]> {
         return this.http.get<Policy[]>(`${this.apiUrl}/policies`);
     }
 
-    // Applications
     applyForPolicy(req: ApplicationRequest): Observable<Application> {
         return this.http.post<Application>(`${this.apiUrl}/applications`, req);
     }
@@ -148,24 +145,20 @@ export class UserService {
         return this.http.patch<PolicyAssignment>(`${this.apiUrl}/policyassignments/${policyId}/pay`, {});
     }
 
-    // Accept an offer — sets application status to CUSTOMER_ACCEPTED
     acceptApplication(applicationNumber: string): Observable<Application> {
         return this.http.patch<Application>(`${this.apiUrl}/applications/${applicationNumber}/accept`, {});
     }
 
-    // Make first payment — creates PolicyAssignment and activates policy
     makeFirstPayment(applicationNumber: string): Observable<PolicyAssignment> {
         return this.http.post<PolicyAssignment>(`${this.apiUrl}/policyassignments`, applicationNumber, {
             headers: { 'Content-Type': 'application/json' }
         });
     }
 
-    // Decline an offer
     declineApplication(applicationId: number): Observable<Application> {
         return this.http.patch<Application>(`${this.apiUrl}/applications/${applicationId}/decline`, {});
     }
 
-    // Claims
     submitClaim(req: ClaimRequest): Observable<ClaimResponse> {
         return this.http.post<ClaimResponse>(`${this.apiUrl}/claims`, req);
     }

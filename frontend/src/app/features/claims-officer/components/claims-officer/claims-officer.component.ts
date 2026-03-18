@@ -2,7 +2,7 @@ import { Component, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AdminService, Claim } from '../../../../services/admin.service';
+import { ClaimsOfficerService, Claim } from '../../services/claims-officer.service';
 import { AuthService } from '../../../../services/auth.service';
 import { DocumentItem, DocumentService } from '../../../../services/document.service';
 
@@ -31,7 +31,7 @@ export class ClaimsOfficerComponent implements OnInit {
     );
 
     constructor(
-        private adminService: AdminService,
+        private claimsOfficerService: ClaimsOfficerService,
         private authService: AuthService,
         private documentService: DocumentService,
         private router: Router
@@ -45,7 +45,7 @@ export class ClaimsOfficerComponent implements OnInit {
     loadAssignedClaims(): void {
         this.isLoading = true;
         this.error = '';
-        this.adminService.getOfficerAssignedClaims().subscribe({
+        this.claimsOfficerService.getAssignedClaims().subscribe({
             next: (data) => {
                 this.assignedClaims.set(data);
                 this.isLoading = false;
@@ -79,7 +79,7 @@ export class ClaimsOfficerComponent implements OnInit {
         if (!confirm(`Are you sure you want to ${approve ? 'approve' : 'reject'} claim ${claim.claimNumber}?`)) return;
 
         this.isLoading = true;
-        this.adminService.verifyClaim(claim.claimNumber, approve).subscribe({
+        this.claimsOfficerService.verifyClaim(claim.claimNumber, approve).subscribe({
             next: () => {
                 this.loadAssignedClaims();
             },
